@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: fr.arezzo.palette
+OpenIDE-Module-Localizing-Bundle: fr/arezzo/palette/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
