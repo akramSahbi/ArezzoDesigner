@@ -65,6 +65,7 @@ import fr.arezzo.designer.EditeurModule.Repositories.SwitchSensorRepository;
 import fr.arezzo.designer.EditeurModule.Repositories.WorkstationRepository;
 import fr.arezzo.designer.palette.PaletteSupport;
 import fr.arezzo.designer.palette.Shape;
+import java.io.Serializable;
 
 /**
  * Scene represents the scene container where we find all of the widgets of the
@@ -76,16 +77,17 @@ import fr.arezzo.designer.palette.Shape;
  * @author akram.sahbi@esprit.tn
  * @version 1.0
  */
-public class Scene extends GraphScene<ShapeNode, String> {
+public class Scene extends GraphScene<ShapeNode, String> implements Serializable
+{
 
     //layer of the scene which will contain all of our widgets
-    public static LayerWidget mainLayer;
+    public static transient LayerWidget mainLayer;
     //layer of the scene which will contain all of the widgets connections
-    public static LayerWidget connectionLayer;
+    public static transient LayerWidget connectionLayer;
     //layer of the scene which will contain all of the widgets interactions
-    public static LayerWidget interactionLayer;
+    public static transient LayerWidget interactionLayer;
     //the widet editor action to edit the name of the widget on the scene
-    public WidgetAction editorAction = ActionFactory.createInplaceEditorAction(new LabelTextFieldEditor());
+   // public WidgetAction editorAction = ActionFactory.createInplaceEditorAction(new LabelTextFieldEditor());
     //variable that will contain currently used Shape Node in the scene
     public static ShapeNode N;
     //variable for the currectly used connector of widgets
@@ -929,201 +931,146 @@ public class Scene extends GraphScene<ShapeNode, String> {
         return widget;
     }
 
-    /**
-     * helper class for editing the label of the widgets at their footer on the
-     * scene
-     */
-    private class LabelTextFieldEditor implements TextFieldInplaceEditor {
-
-        /**
-         * whether we can modify the label of a widget
-         *
-         * @param widget the widget that we want to modify its label
-         * @return
-         */
-        @Override
-        public boolean isEnabled(Widget widget) {
-            return true;
-        }
-
-        /**
-         * gets the label of the widget
-         *
-         * @param widget is the widget to get its name from the scene
-         * @return the name of the widget in the scene
-         */
-        @Override
-        public String getText(Widget widget) {
-            //Access shapeNode to reach its Shape that contains the type of the widget so that we can get its number and
-            //view it as the label
-            //transform the widget as a label widget
-            LabelWidget labelWidget = ((LabelWidget) widget);
-            labelWidget.setLabel("");
-            //find the ShapeNode relative to the widget
-            N = (ShapeNode) findObject(widget);
-            
-            Shape shape = N.getShape();
-            
-            WidgetCommonInfo.WidgetType type = shape.getShapeType();
-            //map the widget to myWidget to access its properties using the widget key
-            Object myWidget = myWidgetsAdded.get(widget);
-            if(type == WidgetCommonInfo.WidgetType.WORKSTATION)
-            {
-                MyWorkstationWidget myWorkstation = (MyWorkstationWidget) myWidget;
-                //return myWorkstation.getParentWorkstationProperties().getNumber()+"";
-                labelWidget.setLabel(myWorkstation.getParentWorkstationProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.LINK_NODE)
-            {
-                MyConnectorWidget x  = (MyConnectorWidget) myWidget;
-                //return x.getMyConnectorInfo().getConnectorProperties().getNumber()+"";
-                labelWidget.setLabel(x.getMyConnectorInfo().getConnectorProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.LOAD_UNLOAD_SENSOR)
-            {
-                MyLoadUnloadSensorWidget x  = (MyLoadUnloadSensorWidget) myWidget;
-                //return x.getLoadUnloadSensorProperties().getNumber()+"";
-                labelWidget.setLabel(x.getLoadUnloadSensorProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.SENSOR)
-            {
-                MySensorWidget x  = (MySensorWidget) myWidget;
-                //return x.getSensorProperties().getNumber()+"";
-                labelWidget.setLabel(x.getSensorProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.SHUTTLE)
-            {
-                MyShuttleWidget x  = (MyShuttleWidget) myWidget;
-                //return x.getParentShuttleProperties().getNumber()+"";
-                labelWidget.setLabel(x.getParentShuttleProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.STOP_SENSOR)
-            {
-                MyStopSensorWidget x  = (MyStopSensorWidget) myWidget;
-                //return x.getStopSensorProperties().getNumber()+"";
-                labelWidget.setLabel(x.getStopSensorProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.SWITCH_INPUT)
-            {
-                MySwitchInputWidget x  = (MySwitchInputWidget) myWidget;
-                //return x.getSwitchInputNodeProperties().getNumber()+"";
-                labelWidget.setLabel(x.getSwitchInputNodeProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.SWITCH_INTERMEDATE)
-            {
-                MySwitchIntermediateWidget x  = (MySwitchIntermediateWidget) myWidget;
-                //return x.getSwitchIntermediateNodeProperties().getNumber()+"";
-                labelWidget.setLabel( x.getSwitchIntermediateNodeProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.SWITCH_OUTPUT)
-            {
-                MySwitchOutputWidget x  = (MySwitchOutputWidget) myWidget;
-                //return x.getSwitchOutputNodeProperties().getNumber()+"";
-                labelWidget.setLabel( x.getSwitchOutputNodeProperties().getNumber()+"");
-            }
-            N.setDisplayName(labelWidget.getLabel());
-            //change the displayed name of the shapeeNode to the value of text
-            N.setDisplayName(labelWidget.getLabel());
-            //change the name of the shapeNode to the value of text
-            N.getShape().setName(labelWidget.getLabel());
-            repaint();
-            return labelWidget.getLabel();
-            //get the displayed name of the widget (as a LabelWidget) from its label
-            //return ((LabelWidget) widget).getLabel();
-            
-        }
-
-        /**
-         * set the name of the the widget
-         *
-         * @param widget the widget that has a label to be edited
-         * @param text the new text value that will become its new label
-         */
-        @Override
-        public void setText(Widget widget, String text) {
-            //find the ShapeNode relative to the widget
-            N = (ShapeNode) findObject(widget);
-            //change the displayed name of the shapeeNode to the value of text
-            N.setDisplayName(text);
-            //change the name of the shapeNode to the value of text
-            N.getShape().setName(text);
-            //change the displayed name of the widget (as a LabelWidget) to the value of text
-            LabelWidget labelWidget = ((LabelWidget) widget);
-            
-            //find the ShapeNode relative to the widget
-            N = (ShapeNode) findObject(widget);
-            
-            Shape shape = N.getShape();
-            
-            WidgetCommonInfo.WidgetType type = shape.getShapeType();
-            //map the widget to myWidget to access its properties using the widget key
-            Object myWidget = myWidgetsAdded.get(widget);
-            if(type == WidgetCommonInfo.WidgetType.WORKSTATION)
-            {
-                MyWorkstationWidget myWorkstation = (MyWorkstationWidget) myWidget;
-                //return myWorkstation.getParentWorkstationProperties().getNumber()+"";
-                myWorkstation.getParentWorkstationProperties().setNumber(Integer.parseInt(text));
-                labelWidget.setLabel(myWorkstation.getParentWorkstationProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.LINK_NODE)
-            {
-                MyConnectorWidget x  = (MyConnectorWidget) myWidget;
-                //return x.getMyConnectorInfo().getConnectorProperties().getNumber()+"";
-                x.getMyConnectorInfo().getConnectorProperties().setNumber(Integer.parseInt(text));
-                labelWidget.setLabel(x.getMyConnectorInfo().getConnectorProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.LOAD_UNLOAD_SENSOR)
-            {
-                MyLoadUnloadSensorWidget x  = (MyLoadUnloadSensorWidget) myWidget;
-                //return x.getLoadUnloadSensorProperties().getNumber()+"";
-                x.getLoadUnloadSensorProperties().setNumber(Integer.parseInt(text));
-                labelWidget.setLabel(x.getLoadUnloadSensorProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.SENSOR)
-            {
-                MySensorWidget x  = (MySensorWidget) myWidget;
-                //return x.getSensorProperties().getNumber()+"";
-                x.getSensorProperties().setNumber(Integer.parseInt(text));
-                labelWidget.setLabel(x.getSensorProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.SHUTTLE)
-            {
-                MyShuttleWidget x  = (MyShuttleWidget) myWidget;
-                //return x.getParentShuttleProperties().getNumber()+"";
-                x.getParentShuttleProperties().setNumber(Integer.parseInt(text));
-                labelWidget.setLabel(x.getParentShuttleProperties().getNumber()+"");
-                
-            }
-            else if(type == WidgetCommonInfo.WidgetType.STOP_SENSOR)
-            {
-                MyStopSensorWidget x  = (MyStopSensorWidget) myWidget;
-                //return x.getStopSensorProperties().getNumber()+"";
-                x.getStopSensorProperties().setNumber(Integer.parseInt(text));
-                labelWidget.setLabel(x.getStopSensorProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.SWITCH_INPUT)
-            {
-                MySwitchInputWidget x  = (MySwitchInputWidget) myWidget;
-                //return x.getSwitchInputNodeProperties().getNumber()+"";
-                x.getSwitchInputNodeProperties().setNumber(Integer.parseInt(text));
-                labelWidget.setLabel(x.getSwitchInputNodeProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.SWITCH_INTERMEDATE)
-            {
-                MySwitchIntermediateWidget x  = (MySwitchIntermediateWidget) myWidget;
-                //return x.getSwitchIntermediateNodeProperties().getNumber()+"";
-                x.getSwitchIntermediateNodeProperties().setNumber(Integer.parseInt(text));
-                labelWidget.setLabel( x.getSwitchIntermediateNodeProperties().getNumber()+"");
-            }
-            else if(type == WidgetCommonInfo.WidgetType.SWITCH_OUTPUT)
-            {
-                MySwitchOutputWidget x  = (MySwitchOutputWidget) myWidget;
-                x.getSwitchOutputNodeProperties().setNumber(Integer.parseInt(text));
-                //return x.getSwitchOutputNodeProperties().getNumber()+"";
-                labelWidget.setLabel( x.getSwitchOutputNodeProperties().getNumber()+"");
-            }
-        }
-    }
+//    /**
+//     * helper class for editing the label of the widgets at their footer on the
+//     * scene
+//     */
+//    private class LabelTextFieldEditor implements TextFieldInplaceEditor, Serializable {
+//
+//        /**
+//         * whether we can modify the label of a widget
+//         *
+//         * @param widget the widget that we want to modify its label
+//         * @return
+//         */
+//        @Override
+//        public boolean isEnabled(Widget widget) {
+//            return true;
+//        }
+//
+//        /**
+//         * gets the label of the widget
+//         *
+//         * @param widget is the widget to get its name from the scene
+//         * @return the name of the widget in the scene
+//         */
+//        @Override
+//        public String getText(Widget widget) {
+//            //Access shapeNode to reach its Shape that contains the type of the widget so that we can get its number and
+//            //view it as the label
+//            //transform the widget as a label widget
+//            LabelWidget labelWidget = ((LabelWidget) widget);
+//            labelWidget.setLabel("");
+//            //find the ShapeNode relative to the widget
+//            N = (ShapeNode) findObject(widget);
+//            
+//            Shape shape = N.getShape();
+//            
+//            
+//            return labelWidget.getLabel();
+//            //get the displayed name of the widget (as a LabelWidget) from its label
+//            //return ((LabelWidget) widget).getLabel();
+//            
+//        }
+//
+//        /**
+//         * set the name of the the widget
+//         *
+//         * @param widget the widget that has a label to be edited
+//         * @param text the new text value that will become its new label
+//         */
+//        @Override
+//        public void setText(Widget widget, String text) {
+//            
+//            //find the ShapeNode relative to the widget
+//            N = (ShapeNode) findObject(widget);
+//            //change the displayed name of the shapeeNode to the value of text
+//            N.setDisplayName(text);
+//            //change the name of the shapeNode to the value of text
+//            N.getShape().setName(text);
+//            //change the displayed name of the widget (as a LabelWidget) to the value of text
+//            LabelWidget labelWidget = ((LabelWidget) widget);
+//            
+//            //find the ShapeNode relative to the widget
+//            N = (ShapeNode) findObject(widget);
+//            
+//            Shape shape = N.getShape();
+//            
+//            
+//            
+//            WidgetCommonInfo.WidgetType type = shape.getShapeType();
+//            //map the widget to myWidget to access its properties using the widget key
+//            Object myWidget = myWidgetsAdded.get(widget);
+//            
+//            
+//            Alert.alert(myWidget+"", myWidget+"", Alert.AlertType.INFORMATION_MESSAGE);
+//            if(type == WidgetCommonInfo.WidgetType.WORKSTATION)
+//            {
+//                MyWorkstationWidget myWorkstation = (MyWorkstationWidget) myWidget;
+//                //return myWorkstation.getParentWorkstationProperties().getNumber()+"";
+//                myWorkstation.getParentWorkstationProperties().setNumber(Integer.parseInt(text));
+//                labelWidget.setLabel(myWorkstation.getParentWorkstationProperties().getNumber()+"");
+//            }
+//            else if(type == WidgetCommonInfo.WidgetType.LINK_NODE)
+//            {
+//                MyConnectorWidget x  = (MyConnectorWidget) myWidget;
+//                //return x.getMyConnectorInfo().getConnectorProperties().getNumber()+"";
+//                x.getMyConnectorInfo().getConnectorProperties().setNumber(Integer.parseInt(text));
+//                labelWidget.setLabel(x.getMyConnectorInfo().getConnectorProperties().getNumber()+"");
+//            }
+//            else if(type == WidgetCommonInfo.WidgetType.LOAD_UNLOAD_SENSOR)
+//            {
+//                MyLoadUnloadSensorWidget x  = (MyLoadUnloadSensorWidget) myWidget;
+//                //return x.getLoadUnloadSensorProperties().getNumber()+"";
+//                x.getLoadUnloadSensorProperties().setNumber(Integer.parseInt(text));
+//                labelWidget.setLabel(x.getLoadUnloadSensorProperties().getNumber()+"");
+//            }
+//            else if(type == WidgetCommonInfo.WidgetType.SENSOR)
+//            {
+//                MySensorWidget x  = (MySensorWidget) myWidget;
+//                //return x.getSensorProperties().getNumber()+"";
+//                x.getSensorProperties().setNumber(Integer.parseInt(text));
+//                labelWidget.setLabel(x.getSensorProperties().getNumber()+"");
+//            }
+//            else if(type == WidgetCommonInfo.WidgetType.SHUTTLE)
+//            {
+//                MyShuttleWidget x  = (MyShuttleWidget) myWidget;
+//                //return x.getParentShuttleProperties().getNumber()+"";
+//                x.getParentShuttleProperties().setNumber(Integer.parseInt(text));
+//                labelWidget.setLabel(x.getParentShuttleProperties().getNumber()+"");
+//                
+//            }
+//            else if(type == WidgetCommonInfo.WidgetType.STOP_SENSOR)
+//            {
+//                MyStopSensorWidget x  = (MyStopSensorWidget) myWidget;
+//                //return x.getStopSensorProperties().getNumber()+"";
+//                x.getStopSensorProperties().setNumber(Integer.parseInt(text));
+//                labelWidget.setLabel(x.getStopSensorProperties().getNumber()+"");
+//            }
+//            else if(type == WidgetCommonInfo.WidgetType.SWITCH_INPUT)
+//            {
+//                MySwitchInputWidget x  = (MySwitchInputWidget) myWidget;
+//                //return x.getSwitchInputNodeProperties().getNumber()+"";
+//                x.getSwitchInputNodeProperties().setNumber(Integer.parseInt(text));
+//                labelWidget.setLabel(x.getSwitchInputNodeProperties().getNumber()+"");
+//            }
+//            else if(type == WidgetCommonInfo.WidgetType.SWITCH_INTERMEDATE)
+//            {
+//                MySwitchIntermediateWidget x  = (MySwitchIntermediateWidget) myWidget;
+//                //return x.getSwitchIntermediateNodeProperties().getNumber()+"";
+//                x.getSwitchIntermediateNodeProperties().setNumber(Integer.parseInt(text));
+//                labelWidget.setLabel( x.getSwitchIntermediateNodeProperties().getNumber()+"");
+//            }
+//            else if(type == WidgetCommonInfo.WidgetType.SWITCH_OUTPUT)
+//            {
+//                MySwitchOutputWidget x  = (MySwitchOutputWidget) myWidget;
+//                x.getSwitchOutputNodeProperties().setNumber(Integer.parseInt(text));
+//                //return x.getSwitchOutputNodeProperties().getNumber()+"";
+//                labelWidget.setLabel( x.getSwitchOutputNodeProperties().getNumber()+"");
+//            }
+//            
+//        }
+//    }
 
     /**
      *
@@ -1176,21 +1123,21 @@ public class Scene extends GraphScene<ShapeNode, String> {
         Scene.interactionLayer = interactionLayer;
     }
 
-    /**
-     *
-     * @return the editor of a widget label
-     */
-    public WidgetAction getEditorAction() {
-        return editorAction;
-    }
-
-    /**
-     *
-     * @param editorAction the editor of a widget label
-     */
-    public void setEditorAction(WidgetAction editorAction) {
-        this.editorAction = editorAction;
-    }
+//    /**
+//     *
+//     * @return the editor of a widget label
+//     */
+//    public WidgetAction getEditorAction() {
+//        return editorAction;
+//    }
+//
+//    /**
+//     *
+//     * @param editorAction the editor of a widget label
+//     */
+//    public void setEditorAction(WidgetAction editorAction) {
+//        this.editorAction = editorAction;
+//    }
 
     /**
      *

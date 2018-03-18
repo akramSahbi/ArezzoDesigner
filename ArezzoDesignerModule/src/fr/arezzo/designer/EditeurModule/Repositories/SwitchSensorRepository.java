@@ -30,9 +30,9 @@ public class SwitchSensorRepository implements IRepository<MySensorWidget>
         boolean done = false;
         if(widget != null)
         {
-            if(widget.getSensorProperties().getNumber() != null)
+            if(widget.getSensorProperties().getID() != null)
             {
-                myMySensorWidgets.put(widget.getSensorProperties().getNumber(),widget);
+                myMySensorWidgets.put(widget.getSensorProperties().getID(),widget);
                 done = true;
             }
             
@@ -47,12 +47,12 @@ public class SwitchSensorRepository implements IRepository<MySensorWidget>
         boolean done = false;
         if(widgetToUpdate != null && widgetUpdated != null )
         {
-            if(widgetToUpdate.getSensorProperties().getNumber() != null && find(widgetToUpdate.getSensorProperties().getNumber()) != null)
+            if(widgetToUpdate.getSensorProperties().getID() != null && find(widgetToUpdate.getSensorProperties().getID()) != null)
             {
-                myMySensorWidgets.remove(widgetToUpdate.getSensorProperties().getNumber());
-                if(widgetUpdated.getSensorProperties().getNumber() != null)
+                myMySensorWidgets.remove(widgetToUpdate.getSensorProperties().getID());
+                if(widgetUpdated.getSensorProperties().getID() != null)
                 {
-                    myMySensorWidgets.put(widgetUpdated.getSensorProperties().getNumber(),widgetUpdated);
+                    myMySensorWidgets.put(widgetUpdated.getSensorProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -70,9 +70,9 @@ public class SwitchSensorRepository implements IRepository<MySensorWidget>
             if(numberOfWidgetToUpdate != null && find(numberOfWidgetToUpdate) != null)
             {
                 myMySensorWidgets.remove(numberOfWidgetToUpdate);
-                if(widgetUpdated.getSensorProperties().getNumber() != null)
+                if(widgetUpdated.getSensorProperties().getID() != null)
                 {
-                    myMySensorWidgets.put(widgetUpdated.getSensorProperties().getNumber(),widgetUpdated);
+                    myMySensorWidgets.put(widgetUpdated.getSensorProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -82,16 +82,16 @@ public class SwitchSensorRepository implements IRepository<MySensorWidget>
     }
 
     @Override
-    public MySensorWidget find(Integer widgetNumber)
+    public MySensorWidget find(Integer widgetID)
     {
-        return myMySensorWidgets.get(widgetNumber);
+        return myMySensorWidgets.get(widgetID);
     }
 
     @Override
-    public boolean remove(Integer widgetNumber)
+    public boolean remove(Integer widgetID)
     {
         boolean done = false;
-        myMySensorWidgets.remove(widgetNumber);
+        myMySensorWidgets.remove(widgetID);
         done = true;
         return done;
     }
@@ -99,13 +99,13 @@ public class SwitchSensorRepository implements IRepository<MySensorWidget>
     @Override
     public boolean remove(MySensorWidget widget)
     {
-        return remove(widget.getSensorProperties().getNumber());
+        return remove(widget.getSensorProperties().getID());
     }
 
     @Override
-    public MySensorWidget get(Integer widgetNumber)
+    public MySensorWidget get(Integer widgetID)
     {
-        return myMySensorWidgets.get(widgetNumber);
+        return myMySensorWidgets.get(widgetID);
     }
 
     @Override

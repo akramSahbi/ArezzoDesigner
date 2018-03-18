@@ -33,12 +33,12 @@ public interface IRepository<T> {
     /**
      * update a widget inside the repository
      *
-     * @param numberOfWidgetToUpdate the number property value of the widget to
+     * @param widgetIDToUpdate the number property value of the widget to
      * be updated
      * @param widgetUpdated updated widget
      * @return whether the widget has been updated
      */
-    public boolean update(Integer numberOfWidgetToUpdate, T widgetUpdated);
+    public boolean update(Integer widgetIDToUpdate, T widgetUpdated);
 
     /**
      * find a widget from the repository
@@ -46,15 +46,15 @@ public interface IRepository<T> {
      * @param widgetNumber the number of the widget to find
      * @return the widget that has been found or null
      */
-    public T find(Integer widgetNumber);
+    public T find(Integer widgetID);
 
     /**
      * remove a widget from the repository
      *
-     * @param widgetNumber the number of the widget to remove
+     * @param widgetID the number of the widget to remove
      * @return whether the widget has been removed
      */
-    public boolean remove(Integer widgetNumber);
+    public boolean remove(Integer widgetID);
 
     /**
      * remove a widget from the repository
@@ -67,10 +67,10 @@ public interface IRepository<T> {
     /**
      * find a widget in a repository
      *
-     * @param widgetNumber the number property value of the widget
+     * @param widgetID the number property value of the widget
      * @return the widget found or null
      */
-    public T get(Integer widgetNumber);
+    public T get(Integer widgetID);
 
     /**
      * find all widgets in a repository

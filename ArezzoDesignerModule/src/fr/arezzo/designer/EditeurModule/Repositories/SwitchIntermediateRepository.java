@@ -31,9 +31,9 @@ public class SwitchIntermediateRepository implements IRepository<MySwitchInterme
         boolean done = false;
         if(widget != null)
         {
-            if(widget.getSwitchIntermediateNodeProperties().getNumber() != null)
+            if(widget.getSwitchIntermediateNodeProperties().getID() != null)
             {
-                myMySwitchIntermediateWidgets.put(widget.getSwitchIntermediateNodeProperties().getNumber(),widget);
+                myMySwitchIntermediateWidgets.put(widget.getSwitchIntermediateNodeProperties().getID(),widget);
                 done = true;
             }
             
@@ -48,12 +48,12 @@ public class SwitchIntermediateRepository implements IRepository<MySwitchInterme
         boolean done = false;
         if(widgetToUpdate != null && widgetUpdated != null )
         {
-            if(widgetToUpdate.getSwitchIntermediateNodeProperties().getNumber() != null && find(widgetToUpdate.getSwitchIntermediateNodeProperties().getNumber()) != null)
+            if(widgetToUpdate.getSwitchIntermediateNodeProperties().getID() != null && find(widgetToUpdate.getSwitchIntermediateNodeProperties().getID()) != null)
             {
-                myMySwitchIntermediateWidgets.remove(widgetToUpdate.getSwitchIntermediateNodeProperties().getNumber());
-                if(widgetUpdated.getSwitchIntermediateNodeProperties().getNumber() != null)
+                myMySwitchIntermediateWidgets.remove(widgetToUpdate.getSwitchIntermediateNodeProperties().getID());
+                if(widgetUpdated.getSwitchIntermediateNodeProperties().getID() != null)
                 {
-                    myMySwitchIntermediateWidgets.put(widgetUpdated.getSwitchIntermediateNodeProperties().getNumber(),widgetUpdated);
+                    myMySwitchIntermediateWidgets.put(widgetUpdated.getSwitchIntermediateNodeProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -71,9 +71,9 @@ public class SwitchIntermediateRepository implements IRepository<MySwitchInterme
             if(numberOfWidgetToUpdate != null && find(numberOfWidgetToUpdate) != null)
             {
                 myMySwitchIntermediateWidgets.remove(numberOfWidgetToUpdate);
-                if(widgetUpdated.getSwitchIntermediateNodeProperties().getNumber() != null)
+                if(widgetUpdated.getSwitchIntermediateNodeProperties().getID() != null)
                 {
-                    myMySwitchIntermediateWidgets.put(widgetUpdated.getSwitchIntermediateNodeProperties().getNumber(),widgetUpdated);
+                    myMySwitchIntermediateWidgets.put(widgetUpdated.getSwitchIntermediateNodeProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -83,16 +83,16 @@ public class SwitchIntermediateRepository implements IRepository<MySwitchInterme
     }
 
     @Override
-    public MySwitchIntermediateWidget find(Integer widgetNumber)
+    public MySwitchIntermediateWidget find(Integer widgetID)
     {
-        return myMySwitchIntermediateWidgets.get(widgetNumber);
+        return myMySwitchIntermediateWidgets.get(widgetID);
     }
 
     @Override
-    public boolean remove(Integer widgetNumber)
+    public boolean remove(Integer widgetID)
     {
         boolean done = false;
-        myMySwitchIntermediateWidgets.remove(widgetNumber);
+        myMySwitchIntermediateWidgets.remove(widgetID);
         done = true;
         return done;
     }
@@ -100,13 +100,13 @@ public class SwitchIntermediateRepository implements IRepository<MySwitchInterme
     @Override
     public boolean remove(MySwitchIntermediateWidget widget)
     {
-        return remove(widget.getSwitchIntermediateNodeProperties().getNumber());
+        return remove(widget.getSwitchIntermediateNodeProperties().getID());
     }
 
     @Override
-    public MySwitchIntermediateWidget get(Integer widgetNumber)
+    public MySwitchIntermediateWidget get(Integer widgetID)
     {
-        return myMySwitchIntermediateWidgets.get(widgetNumber);
+        return myMySwitchIntermediateWidgets.get(widgetID);
     }
 
     @Override

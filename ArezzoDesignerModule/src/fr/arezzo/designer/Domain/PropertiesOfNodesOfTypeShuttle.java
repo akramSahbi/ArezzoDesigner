@@ -19,10 +19,11 @@ import fr.arezzo.designer.Scene.Scene;
 public class PropertiesOfNodesOfTypeShuttle extends IconNodeWidget {
 
     protected Integer number;
+    protected Integer ID;
     protected Float xCoordinate;
     protected Float yCoordinate;
     protected Integer Type;
-
+    
     protected List<Float> speedsToNextNodes;
     protected List<Integer> numbersOfNextNodes;
     //the shuttle size in decimeter
@@ -48,6 +49,7 @@ public class PropertiesOfNodesOfTypeShuttle extends IconNodeWidget {
     //new coordinates sytem for the simulator where point (0,0) represents the center of the network
     protected Float xCoordinateArezzo;
     protected Float yCoordinateArezzo;
+    protected List<Integer> idsOfNextNodes = new ArrayList<>();
 
     /**
      * PropertiesOfNodesOfTypeShuttle constructor
@@ -124,6 +126,16 @@ public class PropertiesOfNodesOfTypeShuttle extends IconNodeWidget {
         this.nextNodestypes = nextNodestypes;
     }
 
+    public List<Integer> getIdsOfNextNodes() {
+        return idsOfNextNodes;
+    }
+
+    public void setIdsOfNextNodes(List<Integer> idsOfNextNodes) {
+        this.idsOfNextNodes = idsOfNextNodes;
+    }
+
+    
+    
     /**
      *
      * @return the x coordinate in arezzo coordination system
@@ -169,6 +181,10 @@ public class PropertiesOfNodesOfTypeShuttle extends IconNodeWidget {
      * @param number is the number of the node (id)
      */
     public void setNumber(Integer number) {
+        if(number > WidgetCommonInfo.biggestNumberAssignedToANode)
+        {
+            WidgetCommonInfo.biggestNumberAssignedToANode = number;
+        }
         this.number = number;
     }
 
@@ -1044,4 +1060,13 @@ public class PropertiesOfNodesOfTypeShuttle extends IconNodeWidget {
         }
 
     }
+
+    public Integer getID() {
+        return ID;
+    }
+
+    public void setID(Integer ID) {
+        this.ID = ID;
+    }
+    
 }

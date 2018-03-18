@@ -33,9 +33,9 @@ public class LoadUnloadWorkstationRepository implements IRepository<MyLoadUnload
         boolean done = false;
         if(widget != null)
         {
-            if(widget.getLoadUnloadWorkstationProperties().getNumber() != null)
+            if(widget.getLoadUnloadWorkstationProperties().getID() != null)
             {
-                myMyLoadUnloadWorkstationWidgets.put(widget.getLoadUnloadWorkstationProperties().getNumber(),widget);
+                myMyLoadUnloadWorkstationWidgets.put(widget.getLoadUnloadWorkstationProperties().getID(),widget);
                 done = true;
             }
             
@@ -50,12 +50,12 @@ public class LoadUnloadWorkstationRepository implements IRepository<MyLoadUnload
         boolean done = false;
         if(widgetToUpdate != null && widgetUpdated != null )
         {
-            if(widgetToUpdate.getLoadUnloadWorkstationProperties().getNumber() != null && find(widgetToUpdate.getLoadUnloadWorkstationProperties().getNumber()) != null)
+            if(widgetToUpdate.getLoadUnloadWorkstationProperties().getID() != null && find(widgetToUpdate.getLoadUnloadWorkstationProperties().getID()) != null)
             {
-                myMyLoadUnloadWorkstationWidgets.remove(widgetToUpdate.getLoadUnloadWorkstationProperties().getNumber());
-                if(widgetUpdated.getLoadUnloadWorkstationProperties().getNumber() != null)
+                myMyLoadUnloadWorkstationWidgets.remove(widgetToUpdate.getLoadUnloadWorkstationProperties().getID());
+                if(widgetUpdated.getLoadUnloadWorkstationProperties().getID() != null)
                 {
-                    myMyLoadUnloadWorkstationWidgets.put(widgetUpdated.getLoadUnloadWorkstationProperties().getNumber(),widgetUpdated);
+                    myMyLoadUnloadWorkstationWidgets.put(widgetUpdated.getLoadUnloadWorkstationProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -73,9 +73,9 @@ public class LoadUnloadWorkstationRepository implements IRepository<MyLoadUnload
             if(numberOfWidgetToUpdate != null && find(numberOfWidgetToUpdate) != null)
             {
                 myMyLoadUnloadWorkstationWidgets.remove(numberOfWidgetToUpdate);
-                if(widgetUpdated.getLoadUnloadWorkstationProperties().getNumber() != null)
+                if(widgetUpdated.getLoadUnloadWorkstationProperties().getID() != null)
                 {
-                    myMyLoadUnloadWorkstationWidgets.put(widgetUpdated.getLoadUnloadWorkstationProperties().getNumber(),widgetUpdated);
+                    myMyLoadUnloadWorkstationWidgets.put(widgetUpdated.getLoadUnloadWorkstationProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -85,16 +85,16 @@ public class LoadUnloadWorkstationRepository implements IRepository<MyLoadUnload
     }
 
     @Override
-    public MyLoadUnloadWorkstationWidget find(Integer widgetNumber)
+    public MyLoadUnloadWorkstationWidget find(Integer widgetID)
     {
-        return myMyLoadUnloadWorkstationWidgets.get(widgetNumber);
+        return myMyLoadUnloadWorkstationWidgets.get(widgetID);
     }
 
     @Override
-    public boolean remove(Integer widgetNumber)
+    public boolean remove(Integer widgetID)
     {
         boolean done = false;
-        myMyLoadUnloadWorkstationWidgets.remove(widgetNumber);
+        myMyLoadUnloadWorkstationWidgets.remove(widgetID);
         done = true;
         return done;
     }
@@ -102,13 +102,13 @@ public class LoadUnloadWorkstationRepository implements IRepository<MyLoadUnload
     @Override
     public boolean remove(MyLoadUnloadWorkstationWidget widget)
     {
-        return remove(widget.getLoadUnloadWorkstationProperties().getNumber());
+        return remove(widget.getLoadUnloadWorkstationProperties().getID());
     }
 
     @Override
-    public MyLoadUnloadWorkstationWidget get(Integer widgetNumber)
+    public MyLoadUnloadWorkstationWidget get(Integer widgetID)
     {
-        return myMyLoadUnloadWorkstationWidgets.get(widgetNumber);
+        return myMyLoadUnloadWorkstationWidgets.get(widgetID);
     }
 
     @Override

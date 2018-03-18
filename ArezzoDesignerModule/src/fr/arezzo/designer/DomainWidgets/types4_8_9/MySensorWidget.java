@@ -43,6 +43,9 @@ import static fr.arezzo.designer.Scene.Scene.N;
 import static fr.arezzo.designer.Scene.Scene.getN;
 import fr.arezzo.designer.palette.ShapeNode;
 import java.util.Arrays;
+import org.netbeans.api.visual.action.TextFieldInplaceEditor;
+import org.netbeans.api.visual.action.WidgetAction;
+import org.netbeans.api.visual.widget.LabelWidget;
 
 /**
  * MySensorWidget represents a sensor widget node of type 8
@@ -68,6 +71,9 @@ public final class MySensorWidget {
     private List<MyConnectorWidget> connections = new ArrayList<>();
     //parent switch
     private MySwitchWidget switchInstance = null;
+    //the widet editor action to edit the name of the widget on the scene
+    public WidgetAction editorAction = ActionFactory.createInplaceEditorAction(new LabelTextFieldEditor());
+    
 
     /**
      * constructor which is initialized using a reference to the scene, and the
@@ -84,6 +90,7 @@ public final class MySensorWidget {
         sensorProperties = new PropertiesOfNodesOfType4_8_9(scene);
         //initialize the number of the widget (ID)
         sensorProperties.setNumber(WidgetCommonInfo.getNumberOfNextWidget());
+        sensorProperties.setID(sensorProperties.getNumber());
         //initialize the type of the widget
         sensorProperties.setType(Integer.parseInt(n.getShape().getType()));
         //initialize our instance of the scene for direct access
@@ -106,7 +113,7 @@ public final class MySensorWidget {
         widget.getActions().addAction(ActionFactory.createMoveAction(myMoveProvider, myMoveProvider));
 
         //add an action to make the widget capable of having links from the widget to connect to another widget (line)
-        widget.getLabelWidget().getActions().addAction(scene.editorAction);
+        widget.getLabelWidget().getActions().addAction(editorAction);
         //add an action to make the widget label editable after hovering
         widget.getActions().addAction(scene.createObjectHoverAction());
         //initializing a constant variable to be accessed from inner methods
@@ -723,6 +730,77 @@ public final class MySensorWidget {
             //then remove the node of the widget from the scene
             scene.removeNode(getN());
 
+        }
+    }
+    
+    
+    /**
+     * helper class for editing the label of the widgets at their footer on the
+     * scene
+     */
+    private class LabelTextFieldEditor implements TextFieldInplaceEditor {
+
+        /**
+         * whether we can modify the label of a widget
+         *
+         * @param widget the widget that we want to modify its label
+         * @return
+         */
+        @Override
+        public boolean isEnabled(Widget widget) {
+            return true;
+        }
+
+        /**
+         * gets the label of the widget
+         *
+         * @param widget is the widget to get its name from the scene
+         * @return the name of the widget in the scene
+         */
+        @Override
+        public String getText(Widget widget) {
+            
+            return MySensorWidget.this.getSensorProperties().getNumber()+"";
+            
+        }
+
+        /**
+         * set the name of the the widget
+         *
+         * @param widget the widget that has a label to be edited
+         * @param text the new text value that will become its new label
+         */
+        @Override
+        public void setText(Widget widget, String text) {
+            
+            try
+            {
+                Integer newNumber = Integer.parseInt(text);
+                MySensorWidget.this.getSensorProperties().setNumber(newNumber);
+                if(newNumber instanceof Integer)
+                {
+                    ((LabelWidget) widget).setLabel(newNumber+"");
+                    for(MyConnectorWidget conn : MySensorWidget.this.getConnections())
+                    {
+                        //Alert.alert("ok", "number conn: " + conn.getMyConnectorInfo().getConnectorProperties().getNumber(), Alert.AlertType.ERROR_MESSAGE);
+                        Integer IdOfTargetWidget = MySensorWidget.this.getSensorProperties().getID();
+                        if(conn.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().contains(IdOfTargetWidget))
+                        {
+                            //Alert.alert("ok", "number conn: " + conn.getMyConnectorInfo().getConnectorProperties().getNumber(), Alert.AlertType.ERROR_MESSAGE);
+                            int i = conn.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().indexOf(IdOfTargetWidget);
+                            conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().remove(i);
+                            conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().add(i, newNumber);
+                            ConnectorRepository.getInstance().update(conn.getMyConnectorInfo().getConnectorProperties().getID(), conn);
+                        }
+                    }
+                }
+                
+            }
+            catch(Exception e)
+            {
+                
+            }
+            
         }
     }
 

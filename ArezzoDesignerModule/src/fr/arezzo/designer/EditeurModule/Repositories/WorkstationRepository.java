@@ -34,9 +34,9 @@ public class WorkstationRepository implements IRepository<MyWorkstationWidget>
         boolean done = false;
         if(widget != null)
         {
-            if(widget.getParentWorkstationProperties().getNumber() != null)
+            if(widget.getParentWorkstationProperties().getID() != null)
             {
-                myMyWorkstationWidgets.put(widget.getParentWorkstationProperties().getNumber(),widget);
+                myMyWorkstationWidgets.put(widget.getParentWorkstationProperties().getID(),widget);
                 done = true;
             }
             
@@ -51,12 +51,12 @@ public class WorkstationRepository implements IRepository<MyWorkstationWidget>
         boolean done = false;
         if(widgetToUpdate != null && widgetUpdated != null )
         {
-            if(widgetToUpdate.getParentWorkstationProperties().getNumber() != null && find(widgetToUpdate.getParentWorkstationProperties().getNumber()) != null)
+            if(widgetToUpdate.getParentWorkstationProperties().getID() != null && find(widgetToUpdate.getParentWorkstationProperties().getID()) != null)
             {
-                myMyWorkstationWidgets.remove(widgetToUpdate.getParentWorkstationProperties().getNumber());
-                if(widgetUpdated.getParentWorkstationProperties().getNumber() != null)
+                myMyWorkstationWidgets.remove(widgetToUpdate.getParentWorkstationProperties().getID());
+                if(widgetUpdated.getParentWorkstationProperties().getID() != null)
                 {
-                    myMyWorkstationWidgets.put(widgetUpdated.getParentWorkstationProperties().getNumber(),widgetUpdated);
+                    myMyWorkstationWidgets.put(widgetUpdated.getParentWorkstationProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -74,9 +74,9 @@ public class WorkstationRepository implements IRepository<MyWorkstationWidget>
             if(numberOfWidgetToUpdate != null && find(numberOfWidgetToUpdate) != null)
             {
                 myMyWorkstationWidgets.remove(numberOfWidgetToUpdate);
-                if(widgetUpdated.getParentWorkstationProperties().getNumber() != null)
+                if(widgetUpdated.getParentWorkstationProperties().getID() != null)
                 {
-                    myMyWorkstationWidgets.put(widgetUpdated.getParentWorkstationProperties().getNumber(),widgetUpdated);
+                    myMyWorkstationWidgets.put(widgetUpdated.getParentWorkstationProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -86,16 +86,16 @@ public class WorkstationRepository implements IRepository<MyWorkstationWidget>
     }
 
     @Override
-    public MyWorkstationWidget find(Integer widgetNumber)
+    public MyWorkstationWidget find(Integer widgetID)
     {
-        return myMyWorkstationWidgets.get(widgetNumber);
+        return myMyWorkstationWidgets.get(widgetID);
     }
 
     @Override
-    public boolean remove(Integer widgetNumber)
+    public boolean remove(Integer widgetID)
     {
         boolean done = false;
-        myMyWorkstationWidgets.remove(widgetNumber);
+        myMyWorkstationWidgets.remove(widgetID);
         done = true;
         return done;
     }
@@ -103,13 +103,13 @@ public class WorkstationRepository implements IRepository<MyWorkstationWidget>
     @Override
     public boolean remove(MyWorkstationWidget widget)
     {
-        return remove(widget.getParentWorkstationProperties().getNumber());
+        return remove(widget.getParentWorkstationProperties().getID());
     }
 
     @Override
-    public MyWorkstationWidget get(Integer widgetNumber)
+    public MyWorkstationWidget get(Integer widgetID)
     {
-        return myMyWorkstationWidgets.get(widgetNumber);
+        return myMyWorkstationWidgets.get(widgetID);
     }
 
     @Override

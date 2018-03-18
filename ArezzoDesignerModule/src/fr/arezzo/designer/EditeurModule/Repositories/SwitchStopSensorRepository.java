@@ -30,9 +30,9 @@ public class SwitchStopSensorRepository implements IRepository<MyStopSensorWidge
         boolean done = false;
         if(widget != null)
         {
-            if(widget.getStopSensorProperties().getNumber() != null)
+            if(widget.getStopSensorProperties().getID() != null)
             {
-                myMyStopSensorWidgets.put(widget.getStopSensorProperties().getNumber(),widget);
+                myMyStopSensorWidgets.put(widget.getStopSensorProperties().getID(),widget);
                 done = true;
             }
             
@@ -47,12 +47,12 @@ public class SwitchStopSensorRepository implements IRepository<MyStopSensorWidge
         boolean done = false;
         if(widgetToUpdate != null && widgetUpdated != null )
         {
-            if(widgetToUpdate.getStopSensorProperties().getNumber() != null && find(widgetToUpdate.getStopSensorProperties().getNumber()) != null)
+            if(widgetToUpdate.getStopSensorProperties().getID() != null && find(widgetToUpdate.getStopSensorProperties().getID()) != null)
             {
-                myMyStopSensorWidgets.remove(widgetToUpdate.getStopSensorProperties().getNumber());
-                if(widgetUpdated.getStopSensorProperties().getNumber() != null)
+                myMyStopSensorWidgets.remove(widgetToUpdate.getStopSensorProperties().getID());
+                if(widgetUpdated.getStopSensorProperties().getID() != null)
                 {
-                    myMyStopSensorWidgets.put(widgetUpdated.getStopSensorProperties().getNumber(),widgetUpdated);
+                    myMyStopSensorWidgets.put(widgetUpdated.getStopSensorProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -70,9 +70,9 @@ public class SwitchStopSensorRepository implements IRepository<MyStopSensorWidge
             if(numberOfWidgetToUpdate != null && find(numberOfWidgetToUpdate) != null)
             {
                 myMyStopSensorWidgets.remove(numberOfWidgetToUpdate);
-                if(widgetUpdated.getStopSensorProperties().getNumber() != null)
+                if(widgetUpdated.getStopSensorProperties().getID() != null)
                 {
-                    myMyStopSensorWidgets.put(widgetUpdated.getStopSensorProperties().getNumber(),widgetUpdated);
+                    myMyStopSensorWidgets.put(widgetUpdated.getStopSensorProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -82,16 +82,16 @@ public class SwitchStopSensorRepository implements IRepository<MyStopSensorWidge
     }
 
     @Override
-    public MyStopSensorWidget find(Integer widgetNumber)
+    public MyStopSensorWidget find(Integer widgetID)
     {
-        return myMyStopSensorWidgets.get(widgetNumber);
+        return myMyStopSensorWidgets.get(widgetID);
     }
 
     @Override
-    public boolean remove(Integer widgetNumber)
+    public boolean remove(Integer widgetID)
     {
         boolean done = false;
-        myMyStopSensorWidgets.remove(widgetNumber);
+        myMyStopSensorWidgets.remove(widgetID);
         done = true;
         return done;
     }
@@ -99,13 +99,13 @@ public class SwitchStopSensorRepository implements IRepository<MyStopSensorWidge
     @Override
     public boolean remove(MyStopSensorWidget widget)
     {
-        return remove(widget.getStopSensorProperties().getNumber());
+        return remove(widget.getStopSensorProperties().getID());
     }
 
     @Override
-    public MyStopSensorWidget get(Integer widgetNumber)
+    public MyStopSensorWidget get(Integer widgetID)
     {
-        return myMyStopSensorWidgets.get(widgetNumber);
+        return myMyStopSensorWidgets.get(widgetID);
     }
 
     @Override

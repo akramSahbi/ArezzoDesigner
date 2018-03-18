@@ -32,9 +32,9 @@ public class ConnectorRepository implements IRepository<MyConnectorWidget>
         boolean done = false;
         if(widget != null)
         {
-            if(widget.getMyConnectorInfo().getConnectorProperties().getNumber() != null)
+            if(widget.getMyConnectorInfo().getConnectorProperties().getID() != null)
             {
-                myMyConnectorWidgets.put(widget.getMyConnectorInfo().getConnectorProperties().getNumber(),widget);
+                myMyConnectorWidgets.put(widget.getMyConnectorInfo().getConnectorProperties().getID(),widget);
                 done = true;
             }
             
@@ -49,12 +49,12 @@ public class ConnectorRepository implements IRepository<MyConnectorWidget>
         boolean done = false;
         if(widgetToUpdate != null && widgetUpdated != null )
         {
-            if(widgetToUpdate.getMyConnectorInfo().getConnectorProperties().getNumber() != null && find(widgetToUpdate.getMyConnectorInfo().getConnectorProperties().getNumber()) != null)
+            if(widgetToUpdate.getMyConnectorInfo().getConnectorProperties().getID() != null && find(widgetToUpdate.getMyConnectorInfo().getConnectorProperties().getID()) != null)
             {
-                myMyConnectorWidgets.remove(widgetToUpdate.getMyConnectorInfo().getConnectorProperties().getNumber());
-                if(widgetUpdated.getMyConnectorInfo().getConnectorProperties().getNumber() != null)
+                myMyConnectorWidgets.remove(widgetToUpdate.getMyConnectorInfo().getConnectorProperties().getID());
+                if(widgetUpdated.getMyConnectorInfo().getConnectorProperties().getID() != null)
                 {
-                    myMyConnectorWidgets.put(widgetUpdated.getMyConnectorInfo().getConnectorProperties().getNumber(),widgetUpdated);
+                    myMyConnectorWidgets.put(widgetUpdated.getMyConnectorInfo().getConnectorProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -72,9 +72,9 @@ public class ConnectorRepository implements IRepository<MyConnectorWidget>
             if(numberOfWidgetToUpdate != null && find(numberOfWidgetToUpdate) != null)
             {
                 myMyConnectorWidgets.remove(numberOfWidgetToUpdate);
-                if(widgetUpdated.getMyConnectorInfo().getConnectorProperties().getNumber() != null)
+                if(widgetUpdated.getMyConnectorInfo().getConnectorProperties().getID() != null)
                 {
-                    myMyConnectorWidgets.put(widgetUpdated.getMyConnectorInfo().getConnectorProperties().getNumber(),widgetUpdated);
+                    myMyConnectorWidgets.put(widgetUpdated.getMyConnectorInfo().getConnectorProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -84,16 +84,16 @@ public class ConnectorRepository implements IRepository<MyConnectorWidget>
     }
 
     @Override
-    public MyConnectorWidget find(Integer widgetNumber)
+    public MyConnectorWidget find(Integer widgetID)
     {
-        return myMyConnectorWidgets.get(widgetNumber);
+        return myMyConnectorWidgets.get(widgetID);
     }
 
     @Override
-    public boolean remove(Integer widgetNumber)
+    public boolean remove(Integer widgetID)
     {
         boolean done = false;
-        myMyConnectorWidgets.remove(widgetNumber);
+        myMyConnectorWidgets.remove(widgetID);
         done = true;
         return done;
     }
@@ -101,13 +101,13 @@ public class ConnectorRepository implements IRepository<MyConnectorWidget>
     @Override
     public boolean remove(MyConnectorWidget widget)
     {
-        return remove(widget.getMyConnectorInfo().getConnectorProperties().getNumber());
+        return remove(widget.getMyConnectorInfo().getConnectorProperties().getID());
     }
 
     @Override
-    public MyConnectorWidget get(Integer widgetNumber)
+    public MyConnectorWidget get(Integer widgetID)
     {
-        return myMyConnectorWidgets.get(widgetNumber);
+        return myMyConnectorWidgets.get(widgetID);
     }
 
     @Override

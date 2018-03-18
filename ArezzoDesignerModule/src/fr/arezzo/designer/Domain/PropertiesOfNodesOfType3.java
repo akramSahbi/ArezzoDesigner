@@ -1,5 +1,6 @@
 package fr.arezzo.designer.Domain;
 
+import fr.arezzo.designer.DomainWidgets.WidgetCommonInfo;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import fr.arezzo.designer.Scene.Scene;
 public class PropertiesOfNodesOfType3 extends IconNodeWidget {
 
     protected Integer number;
+    protected Integer ID;
     protected Float xCoordinate;
     protected Float yCoordinate;
     //new coordinates sytem for the simulator where point (0,0) represents the center of the network
@@ -33,6 +35,7 @@ public class PropertiesOfNodesOfType3 extends IconNodeWidget {
     protected List<Integer> durationsOfOperations;
     protected List<Float> speedsToNextNodes;
     protected List<Integer> numbersOfNextNodes;
+    protected List<Integer> idsOfNextNodes = new ArrayList<>();
 
     /**
      * PropertiesOfNodesOfType3 constructor using the scene that contains all of
@@ -83,6 +86,16 @@ public class PropertiesOfNodesOfType3 extends IconNodeWidget {
         this.durationsOfOperations = durationsOfOperations;
         this.waitingQueueMaximumSize = waitingQueueMaximumSize;
     }
+
+    public List<Integer> getIdsOfNextNodes() {
+        return idsOfNextNodes;
+    }
+
+    public void setIdsOfNextNodes(List<Integer> idsOfNextNodes) {
+        this.idsOfNextNodes = idsOfNextNodes;
+    }
+    
+    
 
     /**
      *
@@ -300,7 +313,7 @@ public class PropertiesOfNodesOfType3 extends IconNodeWidget {
      * NumberProperty represents the "number" property for this node
      *
      */
-    public static class NumberProperty extends PropertySupport.ReadWrite<String> {
+    public static class NumberProperty extends PropertySupport.ReadOnly<String> {
 
         private final PropertiesOfNodesOfType3 workstationObject;
 
@@ -321,6 +334,7 @@ public class PropertiesOfNodesOfType3 extends IconNodeWidget {
          */
         @Override
         public String getValue() throws IllegalAccessException, InvocationTargetException {
+            
             return workstationObject.getNumber() + "";
         }
 
@@ -333,6 +347,7 @@ public class PropertiesOfNodesOfType3 extends IconNodeWidget {
          */
         @Override
         public void setValue(String t) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+            
             workstationObject.setNumber(Integer.parseInt(t.toString()));
         }
 
@@ -1127,4 +1142,13 @@ public class PropertiesOfNodesOfType3 extends IconNodeWidget {
         }
 
     }
+
+    public Integer getID() {
+        return ID;
+    }
+
+    public void setID(Integer ID) {
+        this.ID = ID;
+    }
+    
 }

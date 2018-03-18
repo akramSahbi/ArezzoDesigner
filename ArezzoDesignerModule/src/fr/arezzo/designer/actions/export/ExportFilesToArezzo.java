@@ -103,7 +103,7 @@ public final class ExportFilesToArezzo implements ActionListener {
         if (folderChooser.showOpenDialog(Scene.globalScene.getView()) == JFileChooser.APPROVE_OPTION) 
         {
             folderChosen = folderChooser.getSelectedFile().getAbsoluteFile();
-            Alert.alert("folfer path", folderChosen.getPath(), Alert.AlertType.INFORMATION_MESSAGE);
+            Alert.alert("Chosen path", "Your files will be saved at "+folderChosen.getPath(), Alert.AlertType.INFORMATION_MESSAGE);
             if(Files.notExists(Paths.get(folderChosen.getPath()), LinkOption.NOFOLLOW_LINKS)   )
             {
                 try 

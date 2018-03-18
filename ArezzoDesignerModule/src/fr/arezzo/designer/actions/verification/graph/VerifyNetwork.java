@@ -1,5 +1,6 @@
 package fr.arezzo.designer.actions.verification.graph;
 
+import fr.arezzo.designer.Dialogs.DialogOutputMessages.Alert;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -105,8 +106,9 @@ public final class VerifyNetwork implements ActionListener {
         printTextToOutput("Begining the Verification Process at " + (Instant.now()) + "\n");
 //        Alert.alert("number of widgets is " + WidgetCommonInfo.getTotalNumberOfWidgets() , "number of widgets is " + WidgetCommonInfo.getTotalNumberOfWidgets(), Alert.AlertType.INFORMATION_MESSAGE);
 
+        //Alert.alert(WidgetCommonInfo.biggestNumberAssignedToANode+"", WidgetCommonInfo.biggestNumberAssignedToANode+"", Alert.AlertType.INFORMATION_MESSAGE);
         setSizeOfNetwork(WidgetCommonInfo.getTotalNumberOfWidgets() + 1);
-
+        Integer numberOfWidgets = WidgetCommonInfo.getTotalNumberOfWidgets();
         nodes = new String[sizeOfNetwork];
         adjNodes = new boolean[sizeOfNetwork][sizeOfNetwork];
         //to know which elements are in the same cycle
@@ -259,24 +261,24 @@ public final class VerifyNetwork implements ActionListener {
             //is first end stop sensor connected to first input in switch?
             if (switchWidget.getFirstEndStopSensorNode() != null) {
                 if (switchWidget.getFirstInputNode() != null) {
-                    int mustLinkToSource = switchWidget.getFirstEndStopSensorNode().getStopSensorProperties().getNumber();
-                    int mustLinkToTarget = switchWidget.getFirstInputNode().getSwitchInputNodeProperties().getNumber();
+                    int mustLinkToSource = switchWidget.getFirstEndStopSensorNode().getStopSensorProperties().getID();
+                    int mustLinkToTarget = switchWidget.getFirstInputNode().getSwitchInputNodeProperties().getID();
                     boolean isLinked = false;
 
                     //search recursively in the next nodes links until we find the target node
-                    for (int i = 0; i < switchWidget.getFirstEndStopSensorNode().getStopSensorProperties().getNumbersOfNextNodes().size()
+                    for (int i = 0; i < switchWidget.getFirstEndStopSensorNode().getStopSensorProperties().getIdsOfNextNodes().size()
                             && !isLinked; i++) {
 
-                        int nextNode = switchWidget.getFirstEndStopSensorNode().getStopSensorProperties().getNumbersOfNextNodes().get(i);
+                        int nextNode = switchWidget.getFirstEndStopSensorNode().getStopSensorProperties().getIdsOfNextNodes().get(i);
 
                         while (ConnectorRepository.getInstance().find(nextNode) != null) {
                             MyConnectorWidget currentConnector = ConnectorRepository.getInstance().find(nextNode);
-                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().size() > 0) {
-                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().get(0);
+                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().size() > 0) {
+                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().get(0);
                             }
                         }
                         //is next node is the target?
-                        if (mustLinkToTarget == SwitchInputRepository.getInstance().find(nextNode).getSwitchInputNodeProperties().getNumber()) {
+                        if (mustLinkToTarget == SwitchInputRepository.getInstance().find(nextNode).getSwitchInputNodeProperties().getID()) {
                             isLinked = true;
                             break;
                         }
@@ -301,23 +303,23 @@ public final class VerifyNetwork implements ActionListener {
             //is second end stop sensor connected to second input in switch?
             if (switchWidget.getSecondEndStopSensorNode() != null) {
                 if (switchWidget.getSecondInputNode() != null) {
-                    int mustLinkToSource = switchWidget.getSecondEndStopSensorNode().getStopSensorProperties().getNumber();
-                    int mustLinkToTarget = switchWidget.getSecondInputNode().getSwitchInputNodeProperties().getNumber();
+                    int mustLinkToSource = switchWidget.getSecondEndStopSensorNode().getStopSensorProperties().getID();
+                    int mustLinkToTarget = switchWidget.getSecondInputNode().getSwitchInputNodeProperties().getID();
                     boolean isLinked = false;
                     //search recursively in the next nodes links until we find the target node
-                    for (int i = 0; i < switchWidget.getSecondEndStopSensorNode().getStopSensorProperties().getNumbersOfNextNodes().size()
+                    for (int i = 0; i < switchWidget.getSecondEndStopSensorNode().getStopSensorProperties().getIdsOfNextNodes().size()
                             && !isLinked; i++) {
 
-                        int nextNode = switchWidget.getSecondEndStopSensorNode().getStopSensorProperties().getNumbersOfNextNodes().get(i);
+                        int nextNode = switchWidget.getSecondEndStopSensorNode().getStopSensorProperties().getIdsOfNextNodes().get(i);
 
                         while (ConnectorRepository.getInstance().find(nextNode) != null) {
                             MyConnectorWidget currentConnector = ConnectorRepository.getInstance().find(nextNode);
-                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().size() > 0) {
-                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().get(0);
+                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().size() > 0) {
+                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().get(0);
                             }
                         }
                         //is next node is the target?
-                        if (mustLinkToTarget == SwitchInputRepository.getInstance().find(nextNode).getSwitchInputNodeProperties().getNumber()) {
+                        if (mustLinkToTarget == SwitchInputRepository.getInstance().find(nextNode).getSwitchInputNodeProperties().getID()) {
                             isLinked = true;
                             break;
                         }
@@ -341,23 +343,23 @@ public final class VerifyNetwork implements ActionListener {
             //is first switch input connected to first intermediate in switch?
             if (switchWidget.getFirstInputNode() != null) {
                 if (switchWidget.getFirstIntermediateNode() != null) {
-                    int mustLinkToSource = switchWidget.getFirstInputNode().getSwitchInputNodeProperties().getNumber();
-                    int mustLinkToTarget = switchWidget.getFirstIntermediateNode().getSwitchIntermediateNodeProperties().getNumber();
+                    int mustLinkToSource = switchWidget.getFirstInputNode().getSwitchInputNodeProperties().getID();
+                    int mustLinkToTarget = switchWidget.getFirstIntermediateNode().getSwitchIntermediateNodeProperties().getID();
                     boolean isLinked = false;
                     //search recursively in the next nodes links until we find the target node
-                    for (int i = 0; i < switchWidget.getFirstInputNode().getSwitchInputNodeProperties().getNumbersOfNextNodes().size()
+                    for (int i = 0; i < switchWidget.getFirstInputNode().getSwitchInputNodeProperties().getIdsOfNextNodes().size()
                             && !isLinked; i++) {
 
-                        int nextNode = switchWidget.getFirstInputNode().getSwitchInputNodeProperties().getNumbersOfNextNodes().get(i);
+                        int nextNode = switchWidget.getFirstInputNode().getSwitchInputNodeProperties().getIdsOfNextNodes().get(i);
 
                         while (ConnectorRepository.getInstance().find(nextNode) != null) {
                             MyConnectorWidget currentConnector = ConnectorRepository.getInstance().find(nextNode);
-                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().size() > 0) {
-                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().get(0);
+                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().size() > 0) {
+                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().get(0);
                             }
                         }
                         //is next node is the target?
-                        if (mustLinkToTarget == SwitchIntermediateRepository.getInstance().find(nextNode).getSwitchIntermediateNodeProperties().getNumber()) {
+                        if (mustLinkToTarget == SwitchIntermediateRepository.getInstance().find(nextNode).getSwitchIntermediateNodeProperties().getID()) {
                             isLinked = true;
                             break;
                         }
@@ -382,23 +384,23 @@ public final class VerifyNetwork implements ActionListener {
             //is second switch input connected to first intermediate in switch?
             if (switchWidget.getSecondInputNode() != null) {
                 if (switchWidget.getFirstIntermediateNode() != null) {
-                    int mustLinkToSource = switchWidget.getSecondInputNode().getSwitchInputNodeProperties().getNumber();
-                    int mustLinkToTarget = switchWidget.getFirstIntermediateNode().getSwitchIntermediateNodeProperties().getNumber();
+                    int mustLinkToSource = switchWidget.getSecondInputNode().getSwitchInputNodeProperties().getID();
+                    int mustLinkToTarget = switchWidget.getFirstIntermediateNode().getSwitchIntermediateNodeProperties().getID();
                     boolean isLinked = false;
                     //search recursively in the next nodes links until we find the target node
-                    for (int i = 0; i < switchWidget.getSecondInputNode().getSwitchInputNodeProperties().getNumbersOfNextNodes().size()
+                    for (int i = 0; i < switchWidget.getSecondInputNode().getSwitchInputNodeProperties().getIdsOfNextNodes().size()
                             && !isLinked; i++) {
 
-                        int nextNode = switchWidget.getSecondInputNode().getSwitchInputNodeProperties().getNumbersOfNextNodes().get(i);
+                        int nextNode = switchWidget.getSecondInputNode().getSwitchInputNodeProperties().getIdsOfNextNodes().get(i);
 
                         while (ConnectorRepository.getInstance().find(nextNode) != null) {
                             MyConnectorWidget currentConnector = ConnectorRepository.getInstance().find(nextNode);
-                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().size() > 0) {
-                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().get(0);
+                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().size() > 0) {
+                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().get(0);
                             }
                         }
                         //is next node is the target?
-                        if (mustLinkToTarget == SwitchIntermediateRepository.getInstance().find(nextNode).getSwitchIntermediateNodeProperties().getNumber()) {
+                        if (mustLinkToTarget == SwitchIntermediateRepository.getInstance().find(nextNode).getSwitchIntermediateNodeProperties().getID()) {
                             isLinked = true;
                             break;
                         }
@@ -422,23 +424,23 @@ public final class VerifyNetwork implements ActionListener {
             //is first switch intermediate connected to second intermediate in switch?
             if (switchWidget.getFirstIntermediateNode() != null) {
                 if (switchWidget.getSecondIntermediateNode() != null) {
-                    int mustLinkToSource = switchWidget.getFirstIntermediateNode().getSwitchIntermediateNodeProperties().getNumber();
-                    int mustLinkToTarget = switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getNumber();
+                    int mustLinkToSource = switchWidget.getFirstIntermediateNode().getSwitchIntermediateNodeProperties().getID();
+                    int mustLinkToTarget = switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getID();
                     boolean isLinked = false;
                     //search recursively in the next nodes links until we find the target node
-                    for (int i = 0; i < switchWidget.getFirstIntermediateNode().getSwitchIntermediateNodeProperties().getNumbersOfNextNodes().size()
+                    for (int i = 0; i < switchWidget.getFirstIntermediateNode().getSwitchIntermediateNodeProperties().getIdsOfNextNodes().size()
                             && !isLinked; i++) {
 
-                        int nextNode = switchWidget.getFirstIntermediateNode().getSwitchIntermediateNodeProperties().getNumbersOfNextNodes().get(i);
+                        int nextNode = switchWidget.getFirstIntermediateNode().getSwitchIntermediateNodeProperties().getIdsOfNextNodes().get(i);
 
                         while (ConnectorRepository.getInstance().find(nextNode) != null) {
                             MyConnectorWidget currentConnector = ConnectorRepository.getInstance().find(nextNode);
-                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().size() > 0) {
-                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().get(0);
+                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().size() > 0) {
+                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().get(0);
                             }
                         }
                         //is next node is the target?
-                        if (mustLinkToTarget == SwitchIntermediateRepository.getInstance().find(nextNode).getSwitchIntermediateNodeProperties().getNumber()) {
+                        if (mustLinkToTarget == SwitchIntermediateRepository.getInstance().find(nextNode).getSwitchIntermediateNodeProperties().getID()) {
                             isLinked = true;
                             break;
                         }
@@ -464,23 +466,23 @@ public final class VerifyNetwork implements ActionListener {
             //is second switch intermediate connected to first output  in switch?
             if (switchWidget.getSecondIntermediateNode() != null) {
                 if (switchWidget.getFirstOutputNode() != null) {
-                    int mustLinkToSource = switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getNumber();
-                    int mustLinkToTarget = switchWidget.getFirstOutputNode().getSwitchOutputNodeProperties().getNumber();
+                    int mustLinkToSource = switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getID();
+                    int mustLinkToTarget = switchWidget.getFirstOutputNode().getSwitchOutputNodeProperties().getID();
                     boolean isLinked = false;
                     //search recursively in the next nodes links until we find the target node
-                    for (int i = 0; i < switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getNumbersOfNextNodes().size()
+                    for (int i = 0; i < switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getIdsOfNextNodes().size()
                             && !isLinked; i++) {
 
-                        int nextNode = switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getNumbersOfNextNodes().get(i);
+                        int nextNode = switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getIdsOfNextNodes().get(i);
 
                         while (ConnectorRepository.getInstance().find(nextNode) != null) {
                             MyConnectorWidget currentConnector = ConnectorRepository.getInstance().find(nextNode);
-                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().size() > 0) {
-                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().get(0);
+                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().size() > 0) {
+                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().get(0);
                             }
                         }
                         //is next node is the target?
-                        if (mustLinkToTarget == SwitchOutputRepository.getInstance().find(nextNode).getSwitchOutputNodeProperties().getNumber()) {
+                        if (mustLinkToTarget == SwitchOutputRepository.getInstance().find(nextNode).getSwitchOutputNodeProperties().getID()) {
                             isLinked = true;
                             break;
                         }
@@ -504,23 +506,23 @@ public final class VerifyNetwork implements ActionListener {
             //is second switch intermediate connected to second output  in switch?
             if (switchWidget.getSecondIntermediateNode() != null) {
                 if (switchWidget.getSecondOutputNode() != null) {
-                    int mustLinkToSource = switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getNumber();
-                    int mustLinkToTarget = switchWidget.getSecondOutputNode().getSwitchOutputNodeProperties().getNumber();
+                    int mustLinkToSource = switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getID();
+                    int mustLinkToTarget = switchWidget.getSecondOutputNode().getSwitchOutputNodeProperties().getID();
                     boolean isLinked = false;
                     //search recursively in the next nodes links until we find the target node
-                    for (int i = 0; i < switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getNumbersOfNextNodes().size()
+                    for (int i = 0; i < switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getIdsOfNextNodes().size()
                             && !isLinked; i++) {
 
-                        int nextNode = switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getNumbersOfNextNodes().get(i);
+                        int nextNode = switchWidget.getSecondIntermediateNode().getSwitchIntermediateNodeProperties().getIdsOfNextNodes().get(i);
 
                         while (ConnectorRepository.getInstance().find(nextNode) != null) {
                             MyConnectorWidget currentConnector = ConnectorRepository.getInstance().find(nextNode);
-                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().size() > 0) {
-                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().get(0);
+                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().size() > 0) {
+                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().get(0);
                             }
                         }
                         //is next node is the target?
-                        if (mustLinkToTarget == SwitchOutputRepository.getInstance().find(nextNode).getSwitchOutputNodeProperties().getNumber()) {
+                        if (mustLinkToTarget == SwitchOutputRepository.getInstance().find(nextNode).getSwitchOutputNodeProperties().getID()) {
                             isLinked = true;
                             break;
                         }
@@ -545,23 +547,23 @@ public final class VerifyNetwork implements ActionListener {
             //is first switch output connected to first sensor output in switch?
             if (switchWidget.getFirstOutputNode() != null) {
                 if (switchWidget.getFirstSensorOutputNode() != null) {
-                    int mustLinkToSource = switchWidget.getFirstOutputNode().getSwitchOutputNodeProperties().getNumber();
-                    int mustLinkToTarget = switchWidget.getFirstSensorOutputNode().getSensorProperties().getNumber();
+                    int mustLinkToSource = switchWidget.getFirstOutputNode().getSwitchOutputNodeProperties().getID();
+                    int mustLinkToTarget = switchWidget.getFirstSensorOutputNode().getSensorProperties().getID();
                     boolean isLinked = false;
                     //search recursively in the next nodes links until we find the target node
-                    for (int i = 0; i < switchWidget.getFirstOutputNode().getSwitchOutputNodeProperties().getNumbersOfNextNodes().size()
+                    for (int i = 0; i < switchWidget.getFirstOutputNode().getSwitchOutputNodeProperties().getIdsOfNextNodes().size()
                             && !isLinked; i++) {
 
-                        int nextNode = switchWidget.getFirstOutputNode().getSwitchOutputNodeProperties().getNumbersOfNextNodes().get(i);
+                        int nextNode = switchWidget.getFirstOutputNode().getSwitchOutputNodeProperties().getIdsOfNextNodes().get(i);
 
                         while (ConnectorRepository.getInstance().find(nextNode) != null) {
                             MyConnectorWidget currentConnector = ConnectorRepository.getInstance().find(nextNode);
-                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().size() > 0) {
-                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().get(0);
+                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().size() > 0) {
+                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().get(0);
                             }
                         }
                         //is next node is the target?
-                        if (mustLinkToTarget == SwitchSensorRepository.getInstance().find(nextNode).getSensorProperties().getNumber()) {
+                        if (mustLinkToTarget == SwitchSensorRepository.getInstance().find(nextNode).getSensorProperties().getID()) {
                             isLinked = true;
                             break;
                         }
@@ -585,23 +587,23 @@ public final class VerifyNetwork implements ActionListener {
             //is second switch output connected to second sensor output in switch?
             if (switchWidget.getSecondOutputNode() != null) {
                 if (switchWidget.getSecondSensorOutputNode() != null) {
-                    int mustLinkToSource = switchWidget.getSecondOutputNode().getSwitchOutputNodeProperties().getNumber();
-                    int mustLinkToTarget = switchWidget.getSecondSensorOutputNode().getSensorProperties().getNumber();
+                    int mustLinkToSource = switchWidget.getSecondOutputNode().getSwitchOutputNodeProperties().getID();
+                    int mustLinkToTarget = switchWidget.getSecondSensorOutputNode().getSensorProperties().getID();
                     boolean isLinked = false;
                     //search recursively in the next nodes links until we find the target node
-                    for (int i = 0; i < switchWidget.getSecondOutputNode().getSwitchOutputNodeProperties().getNumbersOfNextNodes().size()
+                    for (int i = 0; i < switchWidget.getSecondOutputNode().getSwitchOutputNodeProperties().getIdsOfNextNodes().size()
                             && !isLinked; i++) {
 
-                        int nextNode = switchWidget.getSecondOutputNode().getSwitchOutputNodeProperties().getNumbersOfNextNodes().get(i);
+                        int nextNode = switchWidget.getSecondOutputNode().getSwitchOutputNodeProperties().getIdsOfNextNodes().get(i);
 
                         while (ConnectorRepository.getInstance().find(nextNode) != null) {
                             MyConnectorWidget currentConnector = ConnectorRepository.getInstance().find(nextNode);
-                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().size() > 0) {
-                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().get(0);
+                            if (currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().size() > 0) {
+                                nextNode = currentConnector.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().get(0);
                             }
                         }
                         //is next node is the target?
-                        if (mustLinkToTarget == SwitchSensorRepository.getInstance().find(nextNode).getSensorProperties().getNumber()) {
+                        if (mustLinkToTarget == SwitchSensorRepository.getInstance().find(nextNode).getSensorProperties().getID()) {
                             isLinked = true;
                             break;
                         }
@@ -662,11 +664,11 @@ public final class VerifyNetwork implements ActionListener {
     public void initializeAdjNodesMatrix() {
         //fill connector nodes
         for (MyConnectorWidget widget : ConnectorRepository.getInstance().getAll()) {
-            int number = widget.getMyConnectorInfo().getConnectorProperties().getNumber();
+            int number = widget.getMyConnectorInfo().getConnectorProperties().getID();
             String label = "";
             String name = WidgetCommonInfo.WidgetType.LINK_NODE.toString() + " " + number;
             nodes[number] = name;
-            for (int nextNodeNumber : widget.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes()) {
+            for (int nextNodeNumber : widget.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes()) {
                 adjNodes[number][nextNodeNumber] = true;
             }
         }
@@ -674,75 +676,75 @@ public final class VerifyNetwork implements ActionListener {
         //fill switchs
         //fill load/unload workstations
         for (MyLoadUnloadWorkstationWidget widget : LoadUnloadWorkstationRepository.getInstance().getAll()) {
-            int number = widget.getLoadUnloadWorkstationProperties().getNumber();
+            int number = widget.getLoadUnloadWorkstationProperties().getID();
             String label = "";
             String name = WidgetCommonInfo.WidgetType.LOAD_UNLOAD_WORKSTATION.toString() + " " + number;
             nodes[number] = name;
 
-            for (int nextNodeNumber : widget.getLoadUnloadWorkstationProperties().getNumbersOfNextNodes()) {
+            for (int nextNodeNumber : widget.getLoadUnloadWorkstationProperties().getIdsOfNextNodes()) {
                 adjNodes[number][nextNodeNumber] = true;
             }
         }
         //fill workstations
         for (MyWorkstationWidget widget : WorkstationRepository.getInstance().getAll()) {
-            int number = widget.getParentWorkstationProperties().getNumber();
+            int number = widget.getParentWorkstationProperties().getID();
             String name = WidgetCommonInfo.WidgetType.WORKSTATION.toString() + " " + number;
             nodes[number] = name;
-            for (int nextNodeNumber : widget.getParentWorkstationProperties().getNumbersOfNextNodes()) {
+            for (int nextNodeNumber : widget.getParentWorkstationProperties().getIdsOfNextNodes()) {
                 adjNodes[number][nextNodeNumber] = true;
             }
         }
         //fill load/unload sensors
         for (MyLoadUnloadSensorWidget widget : LoadUnloadSensorRepository.getInstance().getAll()) {
-            int number = widget.getLoadUnloadSensorProperties().getNumber();
-            String name = WidgetCommonInfo.WidgetType.LOAD_UNLOAD_SENSOR.toString() + " " + number;
+            int number = widget.getLoadUnloadSensorProperties().getID();
+            String name = WidgetCommonInfo.WidgetType.LOAD_UNLOAD_SENSOR.toString() + " " +number;
             nodes[number] = name;
-            for (int nextNodeNumber : widget.getLoadUnloadSensorProperties().getNumbersOfNextNodes()) {
+            for (int nextNodeNumber : widget.getLoadUnloadSensorProperties().getIdsOfNextNodes()) {
                 adjNodes[number][nextNodeNumber] = true;
             }
         }
         //fill sensors
         for (MySensorWidget widget : SwitchSensorRepository.getInstance().getAll()) {
-            int number = widget.getSensorProperties().getNumber();
+            int number = widget.getSensorProperties().getID();
             String name = WidgetCommonInfo.WidgetType.SENSOR.toString() + " " + number;
             nodes[number] = name;
-            for (int nextNodeNumber : widget.getSensorProperties().getNumbersOfNextNodes()) {
+            for (int nextNodeNumber : widget.getSensorProperties().getIdsOfNextNodes()) {
                 adjNodes[number][nextNodeNumber] = true;
             }
         }
         //fill stop sensors
         for (MyStopSensorWidget widget : SwitchStopSensorRepository.getInstance().getAll()) {
-            int number = widget.getStopSensorProperties().getNumber();
+            int number = widget.getStopSensorProperties().getID();
             String name = WidgetCommonInfo.WidgetType.STOP_SENSOR.toString() + " " + number;
             nodes[number] = name;
-            for (int nextNodeNumber : widget.getStopSensorProperties().getNumbersOfNextNodes()) {
+            for (int nextNodeNumber : widget.getStopSensorProperties().getIdsOfNextNodes()) {
                 adjNodes[number][nextNodeNumber] = true;
             }
         }
         //fill switch inputs
         for (MySwitchInputWidget widget : SwitchInputRepository.getInstance().getAll()) {
-            int number = widget.getSwitchInputNodeProperties().getNumber();
+            int number = widget.getSwitchInputNodeProperties().getID();
             String name = WidgetCommonInfo.WidgetType.SWITCH_INPUT.toString() + " " + number;
             nodes[number] = name;
-            for (int nextNodeNumber : widget.getSwitchInputNodeProperties().getNumbersOfNextNodes()) {
+            for (int nextNodeNumber : widget.getSwitchInputNodeProperties().getIdsOfNextNodes()) {
                 adjNodes[number][nextNodeNumber] = true;
             }
         }
         //fill switch outputs
         for (MySwitchOutputWidget widget : SwitchOutputRepository.getInstance().getAll()) {
-            int number = widget.getSwitchOutputNodeProperties().getNumber();
+            int number = widget.getSwitchOutputNodeProperties().getID();
             String name = WidgetCommonInfo.WidgetType.SWITCH_OUTPUT.toString() + " " + number;
             nodes[number] = name;
-            for (int nextNodeNumber : widget.getSwitchOutputNodeProperties().getNumbersOfNextNodes()) {
+            for (int nextNodeNumber : widget.getSwitchOutputNodeProperties().getIdsOfNextNodes()) {
                 adjNodes[number][nextNodeNumber] = true;
             }
         }
         //fill switch intermediates
         for (MySwitchIntermediateWidget widget : SwitchIntermediateRepository.getInstance().getAll()) {
-            int number = widget.getSwitchIntermediateNodeProperties().getNumber();
+            int number = widget.getSwitchIntermediateNodeProperties().getID();
             String name = WidgetCommonInfo.WidgetType.SWITCH_INTERMEDATE.toString() + " " + number;
             nodes[number] = name;
-            for (int nextNodeNumber : widget.getSwitchIntermediateNodeProperties().getNumbersOfNextNodes()) {
+            for (int nextNodeNumber : widget.getSwitchIntermediateNodeProperties().getIdsOfNextNodes()) {
                 adjNodes[number][nextNodeNumber] = true;
             }
         }
@@ -853,7 +855,7 @@ public final class VerifyNetwork implements ActionListener {
         for (Object o : Scene.connectionLayer.getChildren()) {
 
             MyConnectorWidget conn = (MyConnectorWidget) o;
-            if (arezzoCycleNodeNumbers.contains(conn.getMyConnectorInfo().getConnectorProperties().getNumber())) {
+            if (arezzoCycleNodeNumbers.contains(conn.getMyConnectorInfo().getConnectorProperties().getID())) {
                 conn.setLineColor(color);
                 Scene.globalScene.validate();
                 Scene.globalScene.repaint();
@@ -990,7 +992,7 @@ public final class VerifyNetwork implements ActionListener {
      *
      * @return the number of cycles (a.k.a waiting loops)
      */
-    public int getNumberOfCycles() {
+    public int getIDOfCycles() {
         return numberOfCycles;
     }
 

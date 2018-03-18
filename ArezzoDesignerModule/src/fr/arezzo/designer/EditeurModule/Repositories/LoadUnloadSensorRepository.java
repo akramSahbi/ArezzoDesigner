@@ -34,9 +34,9 @@ public class LoadUnloadSensorRepository implements IRepository<MyLoadUnloadSenso
         boolean done = false;
         if(widget != null)
         {
-            if(widget.getLoadUnloadSensorProperties().getNumber() != null)
+            if(widget.getLoadUnloadSensorProperties().getID() != null)
             {
-                myMyLoadUnloadSensorWidgets.put(widget.getLoadUnloadSensorProperties().getNumber(),widget);
+                myMyLoadUnloadSensorWidgets.put(widget.getLoadUnloadSensorProperties().getID(),widget);
                 done = true;
             }
             
@@ -51,12 +51,12 @@ public class LoadUnloadSensorRepository implements IRepository<MyLoadUnloadSenso
         boolean done = false;
         if(widgetToUpdate != null && widgetUpdated != null )
         {
-            if(widgetToUpdate.getLoadUnloadSensorProperties().getNumber() != null && find(widgetToUpdate.getLoadUnloadSensorProperties().getNumber()) != null)
+            if(widgetToUpdate.getLoadUnloadSensorProperties().getID() != null && find(widgetToUpdate.getLoadUnloadSensorProperties().getID()) != null)
             {
-                myMyLoadUnloadSensorWidgets.remove(widgetToUpdate.getLoadUnloadSensorProperties().getNumber());
-                if(widgetUpdated.getLoadUnloadSensorProperties().getNumber() != null)
+                myMyLoadUnloadSensorWidgets.remove(widgetToUpdate.getLoadUnloadSensorProperties().getID());
+                if(widgetUpdated.getLoadUnloadSensorProperties().getID() != null)
                 {
-                    myMyLoadUnloadSensorWidgets.put(widgetUpdated.getLoadUnloadSensorProperties().getNumber(),widgetUpdated);
+                    myMyLoadUnloadSensorWidgets.put(widgetUpdated.getLoadUnloadSensorProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -74,9 +74,9 @@ public class LoadUnloadSensorRepository implements IRepository<MyLoadUnloadSenso
             if(numberOfWidgetToUpdate != null && find(numberOfWidgetToUpdate) != null)
             {
                 myMyLoadUnloadSensorWidgets.remove(numberOfWidgetToUpdate);
-                if(widgetUpdated.getLoadUnloadSensorProperties().getNumber() != null)
+                if(widgetUpdated.getLoadUnloadSensorProperties().getID() != null)
                 {
-                    myMyLoadUnloadSensorWidgets.put(widgetUpdated.getLoadUnloadSensorProperties().getNumber(),widgetUpdated);
+                    myMyLoadUnloadSensorWidgets.put(widgetUpdated.getLoadUnloadSensorProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -86,16 +86,16 @@ public class LoadUnloadSensorRepository implements IRepository<MyLoadUnloadSenso
     }
 
     @Override
-    public MyLoadUnloadSensorWidget find(Integer widgetNumber)
+    public MyLoadUnloadSensorWidget find(Integer widgetID)
     {
-        return myMyLoadUnloadSensorWidgets.get(widgetNumber);
+        return myMyLoadUnloadSensorWidgets.get(widgetID);
     }
 
     @Override
-    public boolean remove(Integer widgetNumber)
+    public boolean remove(Integer widgetID)
     {
         boolean done = false;
-        myMyLoadUnloadSensorWidgets.remove(widgetNumber);
+        myMyLoadUnloadSensorWidgets.remove(widgetID);
         done = true;
         return done;
     }
@@ -103,13 +103,13 @@ public class LoadUnloadSensorRepository implements IRepository<MyLoadUnloadSenso
     @Override
     public boolean remove(MyLoadUnloadSensorWidget widget)
     {
-        return remove(widget.getLoadUnloadSensorProperties().getNumber());
+        return remove(widget.getLoadUnloadSensorProperties().getID());
     }
 
     @Override
-    public MyLoadUnloadSensorWidget get(Integer widgetNumber)
+    public MyLoadUnloadSensorWidget get(Integer widgetID)
     {
-        return myMyLoadUnloadSensorWidgets.get(widgetNumber);
+        return myMyLoadUnloadSensorWidgets.get(widgetID);
     }
 
     @Override

@@ -31,9 +31,9 @@ public class TopologyNodesRepository implements IRepository<MySwitchInputWidget>
         boolean done = false;
         if(widget != null)
         {
-            if(widget.getSwitchInputNodeProperties().getNumber() != null)
+            if(widget.getSwitchInputNodeProperties().getID() != null)
             {
-                myMySwitchInputWidgets.put(widget.getSwitchInputNodeProperties().getNumber(),widget);
+                myMySwitchInputWidgets.put(widget.getSwitchInputNodeProperties().getID(),widget);
                 done = true;
             }
             
@@ -48,12 +48,12 @@ public class TopologyNodesRepository implements IRepository<MySwitchInputWidget>
         boolean done = false;
         if(widgetToUpdate != null && widgetUpdated != null )
         {
-            if(widgetToUpdate.getSwitchInputNodeProperties().getNumber() != null && find(widgetToUpdate.getSwitchInputNodeProperties().getNumber()) != null)
+            if(widgetToUpdate.getSwitchInputNodeProperties().getID() != null && find(widgetToUpdate.getSwitchInputNodeProperties().getID()) != null)
             {
-                myMySwitchInputWidgets.remove(widgetToUpdate.getSwitchInputNodeProperties().getNumber());
-                if(widgetUpdated.getSwitchInputNodeProperties().getNumber() != null)
+                myMySwitchInputWidgets.remove(widgetToUpdate.getSwitchInputNodeProperties().getID());
+                if(widgetUpdated.getSwitchInputNodeProperties().getID() != null)
                 {
-                    myMySwitchInputWidgets.put(widgetUpdated.getSwitchInputNodeProperties().getNumber(),widgetUpdated);
+                    myMySwitchInputWidgets.put(widgetUpdated.getSwitchInputNodeProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -71,9 +71,9 @@ public class TopologyNodesRepository implements IRepository<MySwitchInputWidget>
             if(numberOfWidgetToUpdate != null && find(numberOfWidgetToUpdate) != null)
             {
                 myMySwitchInputWidgets.remove(numberOfWidgetToUpdate);
-                if(widgetUpdated.getSwitchInputNodeProperties().getNumber() != null)
+                if(widgetUpdated.getSwitchInputNodeProperties().getID() != null)
                 {
-                    myMySwitchInputWidgets.put(widgetUpdated.getSwitchInputNodeProperties().getNumber(),widgetUpdated);
+                    myMySwitchInputWidgets.put(widgetUpdated.getSwitchInputNodeProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -83,16 +83,16 @@ public class TopologyNodesRepository implements IRepository<MySwitchInputWidget>
     }
 
     @Override
-    public MySwitchInputWidget find(Integer widgetNumber)
+    public MySwitchInputWidget find(Integer widgetID)
     {
-        return myMySwitchInputWidgets.get(widgetNumber);
+        return myMySwitchInputWidgets.get(widgetID);
     }
 
     @Override
-    public boolean remove(Integer widgetNumber)
+    public boolean remove(Integer widgetID)
     {
         boolean done = false;
-        myMySwitchInputWidgets.remove(widgetNumber);
+        myMySwitchInputWidgets.remove(widgetID);
         done = true;
         return done;
     }
@@ -100,13 +100,13 @@ public class TopologyNodesRepository implements IRepository<MySwitchInputWidget>
     @Override
     public boolean remove(MySwitchInputWidget widget)
     {
-        return remove(widget.getSwitchInputNodeProperties().getNumber());
+        return remove(widget.getSwitchInputNodeProperties().getID());
     }
 
     @Override
-    public MySwitchInputWidget get(Integer widgetNumber)
+    public MySwitchInputWidget get(Integer widgetID)
     {
-        return myMySwitchInputWidgets.get(widgetNumber);
+        return myMySwitchInputWidgets.get(widgetID);
     }
 
     @Override

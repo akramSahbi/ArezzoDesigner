@@ -31,9 +31,9 @@ public class SwitchOutputRepository implements IRepository<MySwitchOutputWidget>
         boolean done = false;
         if(widget != null)
         {
-            if(widget.getSwitchOutputNodeProperties().getNumber() != null)
+            if(widget.getSwitchOutputNodeProperties().getID() != null)
             {
-                myMySwitchOutputWidgets.put(widget.getSwitchOutputNodeProperties().getNumber(),widget);
+                myMySwitchOutputWidgets.put(widget.getSwitchOutputNodeProperties().getID(),widget);
                 done = true;
             }
             
@@ -48,12 +48,12 @@ public class SwitchOutputRepository implements IRepository<MySwitchOutputWidget>
         boolean done = false;
         if(widgetToUpdate != null && widgetUpdated != null )
         {
-            if(widgetToUpdate.getSwitchOutputNodeProperties().getNumber() != null && find(widgetToUpdate.getSwitchOutputNodeProperties().getNumber()) != null)
+            if(widgetToUpdate.getSwitchOutputNodeProperties().getID() != null && find(widgetToUpdate.getSwitchOutputNodeProperties().getID()) != null)
             {
-                myMySwitchOutputWidgets.remove(widgetToUpdate.getSwitchOutputNodeProperties().getNumber());
-                if(widgetUpdated.getSwitchOutputNodeProperties().getNumber() != null)
+                myMySwitchOutputWidgets.remove(widgetToUpdate.getSwitchOutputNodeProperties().getID());
+                if(widgetUpdated.getSwitchOutputNodeProperties().getID() != null)
                 {
-                    myMySwitchOutputWidgets.put(widgetUpdated.getSwitchOutputNodeProperties().getNumber(),widgetUpdated);
+                    myMySwitchOutputWidgets.put(widgetUpdated.getSwitchOutputNodeProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -71,9 +71,9 @@ public class SwitchOutputRepository implements IRepository<MySwitchOutputWidget>
             if(numberOfWidgetToUpdate != null && find(numberOfWidgetToUpdate) != null)
             {
                 myMySwitchOutputWidgets.remove(numberOfWidgetToUpdate);
-                if(widgetUpdated.getSwitchOutputNodeProperties().getNumber() != null)
+                if(widgetUpdated.getSwitchOutputNodeProperties().getID() != null)
                 {
-                    myMySwitchOutputWidgets.put(widgetUpdated.getSwitchOutputNodeProperties().getNumber(),widgetUpdated);
+                    myMySwitchOutputWidgets.put(widgetUpdated.getSwitchOutputNodeProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -83,16 +83,16 @@ public class SwitchOutputRepository implements IRepository<MySwitchOutputWidget>
     }
 
     @Override
-    public MySwitchOutputWidget find(Integer widgetNumber)
+    public MySwitchOutputWidget find(Integer widgetID)
     {
-        return myMySwitchOutputWidgets.get(widgetNumber);
+        return myMySwitchOutputWidgets.get(widgetID);
     }
 
     @Override
-    public boolean remove(Integer widgetNumber)
+    public boolean remove(Integer widgetID)
     {
         boolean done = false;
-        myMySwitchOutputWidgets.remove(widgetNumber);
+        myMySwitchOutputWidgets.remove(widgetID);
         done = true;
         return done;
     }
@@ -100,13 +100,13 @@ public class SwitchOutputRepository implements IRepository<MySwitchOutputWidget>
     @Override
     public boolean remove(MySwitchOutputWidget widget)
     {
-        return remove(widget.getSwitchOutputNodeProperties().getNumber());
+        return remove(widget.getSwitchOutputNodeProperties().getID());
     }
 
     @Override
-    public MySwitchOutputWidget get(Integer widgetNumber)
+    public MySwitchOutputWidget get(Integer widgetID)
     {
-        return myMySwitchOutputWidgets.get(widgetNumber);
+        return myMySwitchOutputWidgets.get(widgetID);
     }
 
     @Override

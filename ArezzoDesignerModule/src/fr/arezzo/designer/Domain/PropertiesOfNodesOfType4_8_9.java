@@ -6,6 +6,7 @@ import java.util.List;
 import org.netbeans.api.visual.widget.general.IconNodeWidget;
 import org.openide.nodes.PropertySupport;
 import fr.arezzo.designer.DomainWidgets.MySwitchWidget;
+import fr.arezzo.designer.DomainWidgets.WidgetCommonInfo;
 import fr.arezzo.designer.DomainWidgets.types4_8_9.MySensorWidget;
 import fr.arezzo.designer.DomainWidgets.types4_8_9.MyStopSensorWidget;
 import fr.arezzo.designer.EditeurModule.Repositories.SwitchStopSensorRepository;
@@ -24,6 +25,7 @@ import fr.arezzo.designer.Scene.Scene;
 public class PropertiesOfNodesOfType4_8_9 extends IconNodeWidget {
 
     protected Integer number;
+    protected Integer ID;
     protected Float xCoordinate;
     protected Float yCoordinate;
     protected Integer Type;
@@ -42,6 +44,8 @@ public class PropertiesOfNodesOfType4_8_9 extends IconNodeWidget {
     //new coordinates sytem for the simulator where point (0,0) represents the center of the network
     protected Float xCoordinateArezzo;
     protected Float yCoordinateArezzo;
+    protected List<Integer> idsOfNextNodes = new ArrayList<>();
+    
 
     /**
      * PropertiesOfNodesOfType4_8_9 constructor using the scene that contains
@@ -84,6 +88,16 @@ public class PropertiesOfNodesOfType4_8_9 extends IconNodeWidget {
 
     }
 
+    public List<Integer> getIdsOfNextNodes() {
+        return idsOfNextNodes;
+    }
+
+    public void setIdsOfNextNodes(List<Integer> idsOfNextNodes) {
+        this.idsOfNextNodes = idsOfNextNodes;
+    }
+
+    
+    
     /**
      *
      * @return the x coordinate in arezzo coordination system
@@ -129,6 +143,10 @@ public class PropertiesOfNodesOfType4_8_9 extends IconNodeWidget {
      * @param number is the number of the node (id)
      */
     public void setNumber(Integer number) {
+        if(number > WidgetCommonInfo.biggestNumberAssignedToANode)
+        {
+            WidgetCommonInfo.biggestNumberAssignedToANode = number;
+        }
         this.number = number;
     }
 
@@ -324,7 +342,7 @@ public class PropertiesOfNodesOfType4_8_9 extends IconNodeWidget {
      * NumberProperty represents the "number" property for this node
      *
      */
-    public static class NumberProperty extends PropertySupport.ReadWrite<String> {
+    public static class NumberProperty extends PropertySupport.ReadOnly<String> {
 
         private final PropertiesOfNodesOfType4_8_9 PropertiesOfNodeObject;
 
@@ -345,6 +363,7 @@ public class PropertiesOfNodesOfType4_8_9 extends IconNodeWidget {
          */
         @Override
         public String getValue() throws IllegalAccessException, InvocationTargetException {
+            
             return PropertiesOfNodeObject.getNumber() + "";
         }
 
@@ -1227,5 +1246,15 @@ public class PropertiesOfNodesOfType4_8_9 extends IconNodeWidget {
         }
 
     }
+
+    public Integer getID() {
+        return ID;
+    }
+
+    public void setID(Integer ID) {
+        this.ID = ID;
+    }
+    
+    
 
 }

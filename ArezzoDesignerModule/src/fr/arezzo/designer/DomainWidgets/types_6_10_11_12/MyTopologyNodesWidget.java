@@ -66,6 +66,7 @@ public class MyTopologyNodesWidget {
         topologyNodeProperties = new PropertiesOfNodesOfType6_10_11_12(scene);
         //initialize the number of the widget (ID)
         topologyNodeProperties.setNumber(WidgetCommonInfo.getNumberOfNextWidget());
+        topologyNodeProperties.setID(topologyNodeProperties.getNumber());
         //initialize the type of the widget
         topologyNodeProperties.setType(Integer.parseInt(n.getShape().getType()));
         //initialize our instance of the scene for direct access
@@ -95,7 +96,7 @@ public class MyTopologyNodesWidget {
         //add an action to make the widget capable of having a label
         //if it is not a link adapter, save space by removing it's label
         if (!(n.getShape().getType().equals("999"))) {
-            widget.getLabelWidget().getActions().addAction(scene.editorAction);
+            //widget.getLabelWidget().getActions().addAction(scene.editorAction);
             //add an action to make the widget label editable after hovering
             widget.getActions().addAction(scene.createObjectHoverAction());
         }

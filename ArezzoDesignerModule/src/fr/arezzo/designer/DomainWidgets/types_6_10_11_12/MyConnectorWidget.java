@@ -36,10 +36,19 @@ import fr.arezzo.designer.DomainWidgets.types4_8_9.MyLoadUnloadSensorWidget;
 import fr.arezzo.designer.DomainWidgets.types4_8_9.MySensorWidget;
 import fr.arezzo.designer.DomainWidgets.types4_8_9.MyStopSensorWidget;
 import fr.arezzo.designer.EditeurModule.Repositories.ConnectorRepository;
+import fr.arezzo.designer.EditeurModule.Repositories.LoadUnloadSensorRepository;
 import fr.arezzo.designer.EditeurModule.Repositories.ShuttleRepository;
+import fr.arezzo.designer.EditeurModule.Repositories.SwitchInputRepository;
+import fr.arezzo.designer.EditeurModule.Repositories.SwitchIntermediateRepository;
+import fr.arezzo.designer.EditeurModule.Repositories.SwitchOutputRepository;
+import fr.arezzo.designer.EditeurModule.Repositories.SwitchSensorRepository;
+import fr.arezzo.designer.EditeurModule.Repositories.SwitchStopSensorRepository;
 import fr.arezzo.designer.actions.verification.graph.VerifyNetwork;
 import fr.arezzo.designer.palette.Shape;
 import fr.arezzo.designer.palette.ShapeNode;
+import org.netbeans.api.visual.action.TextFieldInplaceEditor;
+import org.netbeans.api.visual.action.WidgetAction;
+import org.netbeans.api.visual.widget.LabelWidget;
 
 /**
  * MyConnectorWidget represents a connector widget node of type 6
@@ -60,7 +69,7 @@ public class MyConnectorWidget extends ConnectionWidget {
     private WidgetType sourceWidgetType;
     private WidgetType targetWidgetType;
     private MyConnectorWidget instance = null;
-
+    private IconNodeWidget labelWidget = null;
     private AnchorFactory.DirectionalAnchorKind sourceDirection = null;
     private AnchorFactory.DirectionalAnchorKind targetDirection = null;
     //connections (links) widget
@@ -70,19 +79,28 @@ public class MyConnectorWidget extends ConnectionWidget {
     //is this a linear link?
     public static boolean isLinearLink = false;
     public static boolean currentlyLinking = false;
+    
+    
+    
+    //the widet editor action to edit the name of the widget on the scene
+    public WidgetAction editorAction = ActionFactory.createInplaceEditorAction(new LabelTextFieldEditor());
+    
 
     /**
      * constructor
      *
      * @param scene is the scene that is the container of the widgets
      */
-    public MyConnectorWidget(Scene scene) {
+    public MyConnectorWidget(Scene scene) 
+    {
 
         super(scene);
         instance = MyConnectorWidget.this;
         myConnectorInfo = new ConnectorInfo(scene);
         MyConnectorWidget.scene = scene;
-
+        //added to child widget editor action
+//        //add an action to make the widget capable of having links from the widget to connect to another widget (line)
+//        getActions().addAction(editorAction);
         //removed diirect connection between links must have an intermediate adapter
         //add an action that will make the widget linkable (we can link it to another widget or wire)
         //getActions().addAction( 
@@ -191,7 +209,7 @@ public class MyConnectorWidget extends ConnectionWidget {
                     public void actionPerformed(ActionEvent e) {
 
                         //delete from repository
-                        ConnectorRepository.getInstance().remove(MyConnectorWidget.this.getMyConnectorInfo().getConnectorProperties().getNumber());
+                        ConnectorRepository.getInstance().remove(MyConnectorWidget.this.getMyConnectorInfo().getConnectorProperties().getID());
 
                         //delete the next node of  source => link  and  link => target
                         //and update nextNodes of source
@@ -244,7 +262,7 @@ public class MyConnectorWidget extends ConnectionWidget {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             //verify that the shuttle is indeed in a waiting loop
-            if (VerifyNetwork.getInstance().canWeAttachShuttleToLink(myConnectorInfo.getConnectorProperties().getNumber())) {
+            if (VerifyNetwork.getInstance().canWeAttachShuttleToLink(myConnectorInfo.getConnectorProperties().getID())) {
                 Shape shapeShuttle = new Shape(3, "Shuttles", "99", WidgetCommonInfo.WidgetType.SHUTTLE, "Shuttle", "fr/arezzo/designer/resources/shuttle.png");
                 ShapeNode shapeNodeShuttle = new ShapeNode(shapeShuttle);
 
@@ -252,9 +270,9 @@ public class MyConnectorWidget extends ConnectionWidget {
                 shuttleWidget.getParentShuttleProperties().setNumbersOfNextNodes(MyConnectorWidget.this.getMyConnectorInfo()
                         .getConnectorProperties().getNumbersOfNextNodes());
                 shuttleWidget.getShuttleProperties().setCurrentPathLinkNumber(MyConnectorWidget.this.getMyConnectorInfo().getConnectorProperties()
-                        .getNumber());
+                        .getID());
                 shuttleWidget.getShuttleProperties().setStartNodeNumber(MyConnectorWidget.this.getMyConnectorInfo().getConnectorProperties()
-                        .getNumber());
+                        .getID());
                 shuttleWidget.getShuttleProperties().setEndNodeNumber((MyConnectorWidget.this.getMyConnectorInfo().getConnectorProperties()
                         .getNumbersOfNextNodes().isEmpty() ? 0 : MyConnectorWidget.this.getMyConnectorInfo().getConnectorProperties()
                                 .getNumbersOfNextNodes().get(0)));
@@ -504,7 +522,7 @@ public class MyConnectorWidget extends ConnectionWidget {
         if (sourceWidgetType.equals(WidgetCommonInfo.WidgetType.WORKSTATION)) {
 
             MyWorkstationWidget temp = (MyWorkstationWidget) MySourceWidget;
-            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getNumber();
+            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getID();
             int indexOfNextWidget = 0;
             for (int number : temp.getParentWorkstationProperties().getNumbersOfNextNodes()) {
                 if (numberOfcurrentConnection == number) {
@@ -523,7 +541,7 @@ public class MyConnectorWidget extends ConnectionWidget {
         } else if (sourceWidgetType.equals(WidgetCommonInfo.WidgetType.LOAD_UNLOAD_WORKSTATION)) {
 
             MyLoadUnloadWorkstationWidget temp = (MyLoadUnloadWorkstationWidget) MySourceWidget;
-            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getNumber();
+            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getID();
             int indexOfNextWidget = 0;
             for (int number : temp.getLoadUnloadWorkstationProperties().getNumbersOfNextNodes()) {
                 if (numberOfcurrentConnection == number) {
@@ -540,7 +558,7 @@ public class MyConnectorWidget extends ConnectionWidget {
         } else if (sourceWidgetType.equals(WidgetCommonInfo.WidgetType.LOAD_UNLOAD_SENSOR)) {
 
             MyLoadUnloadSensorWidget temp = (MyLoadUnloadSensorWidget) MySourceWidget;
-            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getNumber();
+            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getID();
             int indexOfNextWidget = 0;
             for (int number : temp.getLoadUnloadSensorProperties().getNumbersOfNextNodes()) {
                 if (numberOfcurrentConnection == number) {
@@ -557,7 +575,7 @@ public class MyConnectorWidget extends ConnectionWidget {
         } else if (sourceWidgetType.equals(WidgetCommonInfo.WidgetType.SENSOR)) {
 
             MySensorWidget temp = (MySensorWidget) MySourceWidget;
-            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getNumber();
+            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getID();
             int indexOfNextWidget = 0;
             for (int number : temp.getSensorProperties().getNumbersOfNextNodes()) {
                 if (numberOfcurrentConnection == number) {
@@ -574,7 +592,7 @@ public class MyConnectorWidget extends ConnectionWidget {
         } else if (sourceWidgetType.equals(WidgetCommonInfo.WidgetType.STOP_SENSOR)) {
 
             MyStopSensorWidget temp = (MyStopSensorWidget) MySourceWidget;
-            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getNumber();
+            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getID();
             int indexOfNextWidget = 0;
             for (int number : temp.getStopSensorProperties().getNumbersOfNextNodes()) {
                 if (numberOfcurrentConnection == number) {
@@ -591,7 +609,7 @@ public class MyConnectorWidget extends ConnectionWidget {
         } else if (sourceWidgetType.equals(WidgetCommonInfo.WidgetType.SWITCH_INPUT)) {
 
             MySwitchInputWidget temp = (MySwitchInputWidget) MySourceWidget;
-            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getNumber();
+            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getID();
             int indexOfNextWidget = 0;
             for (int number : temp.getSwitchInputNodeProperties().getNumbersOfNextNodes()) {
                 if (numberOfcurrentConnection == number) {
@@ -608,7 +626,7 @@ public class MyConnectorWidget extends ConnectionWidget {
         } else if (sourceWidgetType.equals(WidgetCommonInfo.WidgetType.SWITCH_INTERMEDATE)) {
 
             MySwitchIntermediateWidget temp = (MySwitchIntermediateWidget) MySourceWidget;
-            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getNumber();
+            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getID();
             int indexOfNextWidget = 0;
             for (int number : temp.getSwitchIntermediateNodeProperties().getNumbersOfNextNodes()) {
                 if (numberOfcurrentConnection == number) {
@@ -625,7 +643,7 @@ public class MyConnectorWidget extends ConnectionWidget {
         } else if (sourceWidgetType.equals(WidgetCommonInfo.WidgetType.SWITCH_OUTPUT)) {
 
             MySwitchOutputWidget temp = (MySwitchOutputWidget) MySourceWidget;
-            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getNumber();
+            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getID();
             int indexOfNextWidget = 0;
             for (int number : temp.getSwitchOutputNodeProperties().getNumbersOfNextNodes()) {
                 if (numberOfcurrentConnection == number) {
@@ -642,7 +660,7 @@ public class MyConnectorWidget extends ConnectionWidget {
         } else if (sourceWidgetType.equals(WidgetCommonInfo.WidgetType.SHUTTLE)) {
 
             MyShuttleWidget temp = (MyShuttleWidget) MySourceWidget;
-            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getNumber();
+            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getID();
             int indexOfNextWidget = 0;
             for (int number : temp.getParentShuttleProperties().getNumbersOfNextNodes()) {
                 if (numberOfcurrentConnection == number) {
@@ -659,7 +677,7 @@ public class MyConnectorWidget extends ConnectionWidget {
         } else if (sourceWidgetType.equals(WidgetCommonInfo.WidgetType.LINK_NODE)) {
 
             MyConnectorWidget temp = (MyConnectorWidget) MySourceWidget;
-            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getNumber();
+            int numberOfcurrentConnection = getMyConnectorInfo().getConnectorProperties().getID();
             int indexOfNextWidget = 0;
             if (temp.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().size() > 0) {
                 for (int number : temp.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes()) {
@@ -683,7 +701,7 @@ public class MyConnectorWidget extends ConnectionWidget {
             if (Scene.globalScene.getMyWidgetsAdded().get(child) != null && ((MyShuttleWidget) Scene.globalScene.getMyWidgetsAdded().get(child)) instanceof MyShuttleWidget) {
                 //remove from repository
                 MyShuttleWidget shuttleW = (MyShuttleWidget) Scene.globalScene.getMyWidgetsAdded().get(child);
-                boolean removed = ShuttleRepository.getInstance().remove(shuttleW.getParentShuttleProperties().getNumber());
+                boolean removed = ShuttleRepository.getInstance().remove(shuttleW.getParentShuttleProperties().getID());
 //                if(removed)
 //                {
 //                    Alert.alert("removed" +"shuttle"+"from repo", "removed" +"shuttle"+"from repo", Alert.AlertType.INFORMATION_MESSAGE);
@@ -696,9 +714,153 @@ public class MyConnectorWidget extends ConnectionWidget {
         if (currentConnectionNumberFound) {
             Scene.getConnectionLayer().removeChild(this);
         }
+        
 
     }
+    
+    
+    /**
+     * helper class for editing the label of the widgets at their footer on the
+     * scene
+     */
+    private class LabelTextFieldEditor implements TextFieldInplaceEditor {
 
+        /**
+         * whether we can modify the label of a widget
+         *
+         * @param widget the widget that we want to modify its label
+         * @return
+         */
+        @Override
+        public boolean isEnabled(Widget widget) {
+            return true;
+        }
+
+        /**
+         * gets the label of the widget
+         *
+         * @param widget is the widget to get its name from the scene
+         * @return the name of the widget in the scene
+         */
+        @Override
+        public String getText(Widget widget) {
+            
+            return MyConnectorWidget.this.getMyConnectorInfo().getConnectorProperties().getID()+"";
+            
+        }
+
+        /**
+         * set the name of the the widget
+         *
+         * @param widget the widget that has a label to be edited
+         * @param text the new text value that will become its new label
+         */
+        @Override
+        public void setText(Widget widget, String text) {
+            try
+            {
+                Integer newNumber = Integer.parseInt(text);
+                
+                if(newNumber instanceof Integer)
+                {
+                    MyConnectorWidget.this.getMyConnectorInfo().getConnectorProperties().setNumber(newNumber);
+                    ((IconNodeWidget) widget).setLabel(newNumber+"");
+                    ((IconNodeWidget) widget).revalidate();
+                    ((IconNodeWidget) widget).repaint();
+                    
+                    widget.revalidate();
+                    widget.repaint();
+                    Scene.globalScene.repaint();
+                    Scene.globalScene.revalidate();
+                    //getLabelWidget().setLabel(text);
+                    MyConnectorWidget.this.repaint();
+                    Object sourceWidget = MyConnectorWidget.this.getMyConnectorInfo().getMySourceWidget();
+                    WidgetType typeOfSource = MyConnectorWidget.this.getMyConnectorInfo().getSourceWidgetType();
+                    Integer IdOfTargetWidget = MyConnectorWidget.this.getMyConnectorInfo().getConnectorProperties().getID();
+                    int i;
+                    switch(typeOfSource)
+                    {
+                        case LINK_NODE:
+                            MyConnectorWidget conn = (MyConnectorWidget) sourceWidget;
+                            i = conn.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().indexOf(IdOfTargetWidget);
+                            conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().remove(i);
+                            conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().add(i, newNumber);
+                            ConnectorRepository.getInstance().update(conn.getMyConnectorInfo().getConnectorProperties().getID(), conn);
+                            break;
+                        case LOAD_UNLOAD_SENSOR:
+                            MyLoadUnloadSensorWidget x1 = (MyLoadUnloadSensorWidget) sourceWidget;
+                            i = x1.getLoadUnloadSensorProperties().getIdsOfNextNodes().indexOf(IdOfTargetWidget);
+                            x1.getLoadUnloadSensorProperties().getNumbersOfNextNodes().remove(i);
+                            x1.getLoadUnloadSensorProperties().getNumbersOfNextNodes().add(i, newNumber);
+                            LoadUnloadSensorRepository.getInstance().update(x1.getLoadUnloadSensorProperties().getID(), x1);
+                            break;
+                        case SENSOR:
+                            MySensorWidget x2 = (MySensorWidget) sourceWidget;
+                            i = x2.getSensorProperties().getIdsOfNextNodes().indexOf(IdOfTargetWidget);
+                            x2.getSensorProperties().getNumbersOfNextNodes().remove(i);
+                            x2.getSensorProperties().getNumbersOfNextNodes().add(i, newNumber);
+                            SwitchSensorRepository.getInstance().update(x2.getSensorProperties().getID(), x2);
+                            break;
+                        case STOP_SENSOR:
+                            MyStopSensorWidget x3 = (MyStopSensorWidget) sourceWidget;
+                            i = x3.getStopSensorProperties().getIdsOfNextNodes().indexOf(IdOfTargetWidget);
+                            x3.getStopSensorProperties().getNumbersOfNextNodes().remove(i);
+                            x3.getStopSensorProperties().getNumbersOfNextNodes().add(i, newNumber);
+                            SwitchStopSensorRepository.getInstance().update(x3.getStopSensorProperties().getID(), x3);
+                            break;
+                        case SWITCH_INPUT:
+                            MySwitchInputWidget x4 = (MySwitchInputWidget) sourceWidget;
+                            i = x4.getSwitchInputNodeProperties().getIdsOfNextNodes().indexOf(IdOfTargetWidget);
+                            x4.getSwitchInputNodeProperties().getNumbersOfNextNodes().remove(i);
+                            x4.getSwitchInputNodeProperties().getNumbersOfNextNodes().add(i, newNumber);
+                            SwitchInputRepository.getInstance().update(x4.getSwitchInputNodeProperties().getID(), x4);
+                            break;
+                        case SWITCH_INTERMEDATE:
+                            MySwitchIntermediateWidget x5 = (MySwitchIntermediateWidget) sourceWidget;
+                            i = x5.getSwitchIntermediateNodeProperties().getIdsOfNextNodes().indexOf(IdOfTargetWidget);
+                            x5.getSwitchIntermediateNodeProperties().getNumbersOfNextNodes().remove(i);
+                            x5.getSwitchIntermediateNodeProperties().getNumbersOfNextNodes().add(i, newNumber);
+                            SwitchIntermediateRepository.getInstance().update(x5.getSwitchIntermediateNodeProperties().getID(), x5);
+                            break;
+                        case SWITCH_OUTPUT:
+                            MySwitchOutputWidget x6 = (MySwitchOutputWidget) sourceWidget;
+                            i = x6.getSwitchOutputNodeProperties().getIdsOfNextNodes().indexOf(IdOfTargetWidget);
+                            x6.getSwitchOutputNodeProperties().getNumbersOfNextNodes().remove(i);
+                            x6.getSwitchOutputNodeProperties().getNumbersOfNextNodes().add(i, newNumber);
+                            SwitchOutputRepository.getInstance().update(x6.getSwitchOutputNodeProperties().getID(), x6);
+                            break;
+                    }
+                    //update shuttle current link
+                     for (Widget child : MyConnectorWidget.this.getChildren()) 
+                     {
+                        if (Scene.globalScene.getMyWidgetsAdded().get(child) != null && ((MyShuttleWidget) Scene.globalScene.getMyWidgetsAdded().get(child)) instanceof MyShuttleWidget) 
+                        {
+                            //remove from repository
+                            MyShuttleWidget shuttleW = (MyShuttleWidget) Scene.globalScene.getMyWidgetsAdded().get(child);
+                            int idOfShuttle = shuttleW.getParentShuttleProperties().getID();
+                            shuttleW.getParentShuttleProperties().setCurrentPathLinkNumber(newNumber);
+                            shuttleW.getParentShuttleProperties().setCurrentPathLink(MyConnectorWidget.this);
+                            shuttleW.getParentShuttleProperties().setStartNodeNumber(newNumber);
+                            shuttleW.getParentShuttleProperties().setStartNode(MyConnectorWidget.this);
+                            ShuttleRepository.getInstance().update(idOfShuttle, shuttleW);
+                        }
+                     }
+       
+                    
+                    
+                }
+                
+            }
+            catch(Exception e)
+            {
+                
+            }
+            
+        }
+    }
+
+    
+    
     /**
      *
      * @param scene the scene container of user widgets
@@ -872,4 +1034,35 @@ public class MyConnectorWidget extends ConnectionWidget {
     public void setMyConnectorInfo(ConnectorInfo myConnectorInfo) {
         this.myConnectorInfo = myConnectorInfo;
     }
+
+    public IconNodeWidget getLabelWidget() {
+        return labelWidget;
+    }
+
+    public void setLabelWidget(IconNodeWidget labelWidget) {
+        this.labelWidget = labelWidget;
+    }
+
+    public static boolean isIsLinearLink() {
+        return isLinearLink;
+    }
+
+    public static void setIsLinearLink(boolean isLinearLink) {
+        MyConnectorWidget.isLinearLink = isLinearLink;
+    }
+
+    public static boolean isCurrentlyLinking() {
+        return currentlyLinking;
+    }
+
+    public static void setCurrentlyLinking(boolean currentlyLinking) {
+        MyConnectorWidget.currentlyLinking = currentlyLinking;
+    }
+
+   
+
+    public WidgetAction getEditorAction() {
+        return editorAction;
+    }
+    
 }

@@ -59,6 +59,7 @@ public class WidgetCommonInfo {
     //represents the Number to be assigned to a widget
     private static Integer NumberOfNextWidget = 1;
     private static Integer TotalNumberOfWidgets = 0;
+    public static Integer biggestNumberAssignedToANode = 0;
     private static String result = "-1";
     //IPC semaphores
     public static Semaphore semaphore = new Semaphore(1);
@@ -1223,6 +1224,7 @@ public class WidgetCommonInfo {
             conn.setSourceWidget(source);
             conn.setTargetWidget(target);
             conn.getMyConnectorInfo().getConnectorProperties().setNumber(WidgetCommonInfo.getNumberOfNextWidget());
+            conn.getMyConnectorInfo().getConnectorProperties().setID(conn.getMyConnectorInfo().getConnectorProperties().getNumber());
             //check that the source is a widget and not a connector
             if ((ShapeNode) Scene.globalScene.findObject(source) != null) {
 
@@ -1235,8 +1237,12 @@ public class WidgetCommonInfo {
 
                     //update next nodes for source
                     mywwSource.getParentWorkstationProperties().getNumbersOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getNumber());
+                    //update IDs
+                    mywwSource.getParentWorkstationProperties().getIdsOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getID());
                     //update speed of next nodes for source
                     mywwSource.getParentWorkstationProperties().getSpeedsToNextNodes().add(0.0f);
+                    
+                    
 
                     conn.getMyConnectorInfo().setMySourceWidget(mywwSource);
                     conn.getMyConnectorInfo().setSourceWidgetType(sourceWidgetType);
@@ -1247,6 +1253,8 @@ public class WidgetCommonInfo {
                     MyLoadUnloadWorkstationWidget mylUw = (MyLoadUnloadWorkstationWidget) Scene.globalScene.getMyWidgetsAdded().get(source);
                     //update next nodes for source
                     mylUw.getLoadUnloadWorkstationProperties().getNumbersOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getNumber());
+                    //update IDs
+                    mylUw.getLoadUnloadWorkstationProperties().getIdsOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getID());
                     //update speed of next nodes for source
                     mylUw.getLoadUnloadWorkstationProperties().getSpeedsToNextNodes().add(0.0f);
 
@@ -1259,6 +1267,8 @@ public class WidgetCommonInfo {
                     MyLoadUnloadSensorWidget mylUw = (MyLoadUnloadSensorWidget) Scene.globalScene.getMyWidgetsAdded().get(source);
                     //update next nodes for source
                     mylUw.getLoadUnloadSensorProperties().getNumbersOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getNumber());
+                    //update IDs
+                    mylUw.getLoadUnloadSensorProperties().getIdsOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getID());
                     //update speed of next nodes for source
                     mylUw.getLoadUnloadSensorProperties().getSpeedsToNextNodes().add(0.0f);
 
@@ -1271,6 +1281,8 @@ public class WidgetCommonInfo {
                     MySensorWidget mySw = (MySensorWidget) Scene.globalScene.getMyWidgetsAdded().get(source);
                     //update next nodes for source
                     mySw.getSensorProperties().getNumbersOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getNumber());
+                    //update IDs
+                    mySw.getSensorProperties().getIdsOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getID());
                     //update speed of next nodes for source
                     mySw.getSensorProperties().getSpeedsToNextNodes().add(0.0f);
 
@@ -1283,6 +1295,8 @@ public class WidgetCommonInfo {
                     MyStopSensorWidget mySsw = (MyStopSensorWidget) Scene.globalScene.getMyWidgetsAdded().get(source);
                     //update next nodes for source
                     mySsw.getStopSensorProperties().getNumbersOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getNumber());
+                    //update IDs
+                    mySsw.getStopSensorProperties().getIdsOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getID());
                     //update speed of next nodes for source
                     mySsw.getStopSensorProperties().getSpeedsToNextNodes().add(0.0f);
 
@@ -1295,6 +1309,8 @@ public class WidgetCommonInfo {
                     MySwitchInputWidget mySiW = (MySwitchInputWidget) Scene.globalScene.getMyWidgetsAdded().get(source);
                     //update next nodes for source
                     mySiW.getSwitchInputNodeProperties().getNumbersOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getNumber());
+                    //update IDs
+                    mySiW.getSwitchInputNodeProperties().getIdsOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getID());
                     //update speed of next nodes for source
                     mySiW.getSwitchInputNodeProperties().getSpeedsToNextNodes().add(0.0f);
 
@@ -1307,6 +1323,8 @@ public class WidgetCommonInfo {
                     MySwitchIntermediateWidget mySiW = (MySwitchIntermediateWidget) Scene.globalScene.getMyWidgetsAdded().get(source);
                     //update next nodes for source
                     mySiW.getSwitchIntermediateNodeProperties().getNumbersOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getNumber());
+                    //update IDs
+                    mySiW.getSwitchIntermediateNodeProperties().getIdsOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getID());
                     //update speed of next nodes for source
                     mySiW.getSwitchIntermediateNodeProperties().getSpeedsToNextNodes().add(0.0f);
 
@@ -1319,6 +1337,8 @@ public class WidgetCommonInfo {
                     MySwitchOutputWidget mySoW = (MySwitchOutputWidget) Scene.globalScene.getMyWidgetsAdded().get(source);
                     //update next nodes for source
                     mySoW.getSwitchOutputNodeProperties().getNumbersOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getNumber());
+                    //update IDs
+                    mySoW.getSwitchOutputNodeProperties().getIdsOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getID());
                     //update speed of next nodes for source
                     mySoW.getSwitchOutputNodeProperties().getSpeedsToNextNodes().add(0.0f);
 
@@ -1331,6 +1351,8 @@ public class WidgetCommonInfo {
                     MyShuttleWidget mySw = (MyShuttleWidget) Scene.globalScene.getMyWidgetsAdded().get(source);
                     //update next nodes for source
                     mySw.getParentShuttleProperties().getNumbersOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getNumber());
+                    //update IDs
+                    mySw.getParentShuttleProperties().getIdsOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getID());
                     //update speed of next nodes for source
                     mySw.getParentShuttleProperties().getSpeedsToNextNodes().add(0.0f);
 
@@ -1353,6 +1375,8 @@ public class WidgetCommonInfo {
                         adapterPreferredLocation = mySwAdapter.getAdapterLocation();
                         //update next nodes of the adapter to be used for every link having this adapter as target
                         mySwAdapter.getTopologyNodeProperties().getNumbersOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getNumber());
+                        //update IDs
+                        mySwAdapter.getTopologyNodeProperties().getIdsOfNextNodes().add(conn.getMyConnectorInfo().getConnectorProperties().getID());
                         //update speed of next nodes for source
                         mySwAdapter.getTopologyNodeProperties().getSpeedsToNextNodes().add(0.0f);
 
@@ -1371,6 +1395,7 @@ public class WidgetCommonInfo {
                             List<Integer> numberOfNextNodesOfLink1 = myFinalSConnectorLink1.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes();
                             int indexOfAdapterNumber = numberOfNextNodesOfLink1.indexOf(mySwAdapter.getTopologyNodeProperties().getNumber());
                             numberOfNextNodesOfLink1.remove(mySwAdapter.getTopologyNodeProperties().getNumber());
+                            //ID'S?
                             //update speeds
                             List<Float> speedToNextNodesOfLink1 = myFinalSConnectorLink1.getMyConnectorInfo().getConnectorProperties().getSpeedsToNextNodes();
 //                            speedToNextNodesOfLink1.remove(indexOfAdapterNumber);
@@ -1405,6 +1430,8 @@ public class WidgetCommonInfo {
                     //update next nodes for link 
                     int numberOfNextNode = mywwTarget.getParentWorkstationProperties().getNumber();
                     conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().add(numberOfNextNode);
+                    //id
+                    conn.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().add(mywwTarget.getParentWorkstationProperties().getID());
                     //update speed of next nodes for source
                     conn.getMyConnectorInfo().getConnectorProperties().getSpeedsToNextNodes().add(0.0f);
 
@@ -1424,6 +1451,7 @@ public class WidgetCommonInfo {
                     //update next nodes for link 
                     int numberOfNextNode = mylUw.getLoadUnloadWorkstationProperties().getNumber();
                     conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().add(numberOfNextNode);
+                    conn.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().add(mylUw.getLoadUnloadWorkstationProperties().getID());
                     //update speed of next nodes for source
                     conn.getMyConnectorInfo().getConnectorProperties().getSpeedsToNextNodes().add(0.0f);
 
@@ -1439,6 +1467,7 @@ public class WidgetCommonInfo {
                     //update next nodes for link 
                     int numberOfNextNode = mylUw.getLoadUnloadSensorProperties().getNumber();
                     conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().add(numberOfNextNode);
+                    conn.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().add(mylUw.getLoadUnloadSensorProperties().getID());
                     //update speed of next nodes for source
                     conn.getMyConnectorInfo().getConnectorProperties().getSpeedsToNextNodes().add(0.0f);
                     //update connector with the linked MyWidget target  and type of the linked MyWidget
@@ -1460,6 +1489,7 @@ public class WidgetCommonInfo {
                     //update next nodes for link 
                     int numberOfNextNode = mySw.getSensorProperties().getNumber();
                     conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().add(numberOfNextNode);
+                    conn.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().add(mySw.getSensorProperties().getID());
                     //update speed of next nodes for source
                     conn.getMyConnectorInfo().getConnectorProperties().getSpeedsToNextNodes().add(0.0f);
                     //update connector with the linked MyWidget target  and type of the linked MyWidget
@@ -1480,6 +1510,7 @@ public class WidgetCommonInfo {
                     //update next nodes for link 
                     int numberOfNextNode = mySsw.getStopSensorProperties().getNumber();
                     conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().add(numberOfNextNode);
+                    conn.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().add(mySsw.getStopSensorProperties().getID());
                     //update speed of next nodes for source
                     conn.getMyConnectorInfo().getConnectorProperties().getSpeedsToNextNodes().add(0.0f);
                     //update connector with the linked MyWidget target  and type of the linked MyWidget
@@ -1502,6 +1533,7 @@ public class WidgetCommonInfo {
                     //update next nodes for link 
                     int numberOfNextNode = mySiW.getSwitchInputNodeProperties().getNumber();
                     conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().add(numberOfNextNode);
+                    conn.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().add(mySiW.getSwitchInputNodeProperties().getID());
                     //update speed of next nodes for source
                     conn.getMyConnectorInfo().getConnectorProperties().getSpeedsToNextNodes().add(0.0f);
 
@@ -1523,6 +1555,7 @@ public class WidgetCommonInfo {
                     //update next nodes for link 
                     int numberOfNextNode = mySiW.getSwitchIntermediateNodeProperties().getNumber();
                     conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().add(numberOfNextNode);
+                    conn.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().add(mySiW.getSwitchIntermediateNodeProperties().getID());
                     //update speed of next nodes for source
                     conn.getMyConnectorInfo().getConnectorProperties().getSpeedsToNextNodes().add(0.0f);
                     //update connector with the linked MyWidget target  and type of the linked MyWidget
@@ -1544,6 +1577,7 @@ public class WidgetCommonInfo {
                     //update next nodes for link 
                     int numberOfNextNode = mySoW.getSwitchOutputNodeProperties().getNumber();
                     conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().add(numberOfNextNode);
+                    conn.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().add(mySoW.getSwitchOutputNodeProperties().getID());
                     //update speed of next nodes for source
                     conn.getMyConnectorInfo().getConnectorProperties().getSpeedsToNextNodes().add(0.0f);
                     //update connector with the linked MyWidget target  and type of the linked MyWidget
@@ -1559,6 +1593,7 @@ public class WidgetCommonInfo {
                     //update next nodes for link 
                     int numberOfNextNode = mySw.getParentShuttleProperties().getNumber();
                     conn.getMyConnectorInfo().getConnectorProperties().getNumbersOfNextNodes().add(numberOfNextNode);
+                    conn.getMyConnectorInfo().getConnectorProperties().getIdsOfNextNodes().add(mySw.getParentShuttleProperties().getID());
 
                     //update speed of next nodes for source
                     conn.getMyConnectorInfo().getConnectorProperties().getSpeedsToNextNodes().add(0.0f);
@@ -1580,6 +1615,9 @@ public class WidgetCommonInfo {
                         //update from all of the next nodes from the adapter
                         List<Integer> numberOfNextNodes = myTw.getTopologyNodeProperties().getNumbersOfNextNodes();
                         conn.getMyConnectorInfo().getConnectorProperties().setNumbersOfNextNodes(numberOfNextNodes);
+                        //update id's
+                        List<Integer> IDsOfNextNodes = myTw.getTopologyNodeProperties().getIdsOfNextNodes();
+                        conn.getMyConnectorInfo().getConnectorProperties().setIdsOfNextNodes(IDsOfNextNodes);
                         //update speeds
                         List<Float> speedsTONextNodes = myTw.getTopologyNodeProperties().getSpeedsToNextNodes();
                         conn.getMyConnectorInfo().getConnectorProperties().setSpeedsToNextNodes(speedsTONextNodes);
@@ -1734,9 +1772,18 @@ public class WidgetCommonInfo {
                 IconNodeWidget widget = new IconNodeWidget(Scene.globalScene);
                 //initialize the label of the widget
                 //widget.setImage(ImageUtilities.loadImage("fr/arezzo/designer/resources/switch_thumbnail.png"));
+                
+                
+                //removed old widget
+                //replaced it with a widget label
+                
                 widget.setLabel(conn.getMyConnectorInfo().getConnectorProperties().getNumber() + "");
                 widget.setVisible(true);
+                //add an action to make the widget capable of having links from the widget to connect to another widget (line)
+                widget.getActions().addAction(conn.getEditorAction());
                 conn.addChild(widget, null);
+                conn.setLabelWidget(widget);
+                
 
                 conn.setConstraint(widget, LayoutFactory.ConnectionWidgetLayoutAlignment.BOTTOM_CENTER, 0.5f);
                 connectionLayer.addChild(conn);

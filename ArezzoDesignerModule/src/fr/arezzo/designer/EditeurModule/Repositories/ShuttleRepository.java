@@ -32,9 +32,9 @@ public class ShuttleRepository implements IRepository<MyShuttleWidget>
         boolean done = false;
         if(widget != null)
         {
-            if(widget.getParentShuttleProperties().getNumber() != null)
+            if(widget.getParentShuttleProperties().getID() != null)
             {
-                myMyShuttleWidgets.put(widget.getParentShuttleProperties().getNumber(),widget);
+                myMyShuttleWidgets.put(widget.getParentShuttleProperties().getID(),widget);
                 done = true;
             }
             
@@ -49,12 +49,12 @@ public class ShuttleRepository implements IRepository<MyShuttleWidget>
         boolean done = false;
         if(widgetToUpdate != null && widgetUpdated != null )
         {
-            if(widgetToUpdate.getParentShuttleProperties().getNumber() != null && find(widgetToUpdate.getParentShuttleProperties().getNumber()) != null)
+            if(widgetToUpdate.getParentShuttleProperties().getID() != null && find(widgetToUpdate.getParentShuttleProperties().getID()) != null)
             {
-                myMyShuttleWidgets.remove(widgetToUpdate.getParentShuttleProperties().getNumber());
-                if(widgetUpdated.getParentShuttleProperties().getNumber() != null)
+                myMyShuttleWidgets.remove(widgetToUpdate.getParentShuttleProperties().getID());
+                if(widgetUpdated.getParentShuttleProperties().getID() != null)
                 {
-                    myMyShuttleWidgets.put(widgetUpdated.getParentShuttleProperties().getNumber(),widgetUpdated);
+                    myMyShuttleWidgets.put(widgetUpdated.getParentShuttleProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -72,9 +72,9 @@ public class ShuttleRepository implements IRepository<MyShuttleWidget>
             if(numberOfWidgetToUpdate != null && find(numberOfWidgetToUpdate) != null)
             {
                 myMyShuttleWidgets.remove(numberOfWidgetToUpdate);
-                if(widgetUpdated.getParentShuttleProperties().getNumber() != null)
+                if(widgetUpdated.getParentShuttleProperties().getID() != null)
                 {
-                    myMyShuttleWidgets.put(widgetUpdated.getParentShuttleProperties().getNumber(),widgetUpdated);
+                    myMyShuttleWidgets.put(widgetUpdated.getParentShuttleProperties().getID(),widgetUpdated);
                     done = true;
                 }
             }
@@ -84,16 +84,16 @@ public class ShuttleRepository implements IRepository<MyShuttleWidget>
     }
 
     @Override
-    public MyShuttleWidget find(Integer widgetNumber)
+    public MyShuttleWidget find(Integer widgetID)
     {
-        return myMyShuttleWidgets.get(widgetNumber);
+        return myMyShuttleWidgets.get(widgetID);
     }
 
     @Override
-    public boolean remove(Integer widgetNumber)
+    public boolean remove(Integer widgetID)
     {
         boolean done = false;
-        myMyShuttleWidgets.remove(widgetNumber);
+        myMyShuttleWidgets.remove(widgetID);
         done = true;
         return done;
     }
@@ -101,13 +101,13 @@ public class ShuttleRepository implements IRepository<MyShuttleWidget>
     @Override
     public boolean remove(MyShuttleWidget widget)
     {
-        return remove(widget.getParentShuttleProperties().getNumber());
+        return remove(widget.getParentShuttleProperties().getID());
     }
 
     @Override
-    public MyShuttleWidget get(Integer widgetNumber)
+    public MyShuttleWidget get(Integer widgetID)
     {
-        return myMyShuttleWidgets.get(widgetNumber);
+        return myMyShuttleWidgets.get(widgetID);
     }
 
     @Override

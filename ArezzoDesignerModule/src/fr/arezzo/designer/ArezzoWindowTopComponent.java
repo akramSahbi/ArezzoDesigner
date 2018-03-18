@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fr.arezzo.designer;
 
 import fr.arezzo.designer.Scene.Scene;
@@ -52,6 +47,8 @@ import org.openide.windows.TopComponent;
 })
 public final class ArezzoWindowTopComponent extends TopComponent {
 
+    private GraphScene<ShapeNode, String> scene;
+    public static ArezzoWindowTopComponent instance;
     public ArezzoWindowTopComponent() {
         initComponents();
         setName(Bundle.CTL_ArezzoWindowTopComponent());
@@ -68,15 +65,25 @@ public final class ArezzoWindowTopComponent extends TopComponent {
         add(scrollPane, BorderLayout.CENTER);
         //Create the GraphSceneImpl:
         //GraphSceneImpl scene = new GraphSceneImpl(); 
-        GraphScene<ShapeNode, String> scene = new Scene();
+        scene = new Scene();
 
         //Add it to the JScrollPane: 
         scrollPane.setViewportView(scene.createView());
         //Add the SatellitView to the scene: 
         add(scene.createSatelliteView(), BorderLayout.WEST);
         //associateLookup( Lookups.singleton(PaletteSupport.createPalette() )); 
+        instance = ArezzoWindowTopComponent.this;
 
     }
+
+    public GraphScene<ShapeNode, String> getScene() {
+        return scene;
+    }
+
+    public void setScene(GraphScene<ShapeNode, String> scene) {
+        this.scene = scene;
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
